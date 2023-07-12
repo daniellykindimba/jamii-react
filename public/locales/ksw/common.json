@@ -1,0 +1,115 @@
+{
+    "pages": {
+      "login": {
+        "title": "Login katika akaunti yako",
+        "signin": "Ingia",
+        "signup": "Jiunge",
+        "divider": "au",
+        "fields": {
+          "email": "Email",
+          "password": "Nywila"
+        },
+        "errors": {
+          "validEmail": "Barua pepe sio halali"
+        },
+        "buttons": {
+          "submit": "Ingia",
+          "forgotPassword": "Umesahau nywila?",
+          "noAccount": "Huna akaunti?",
+          "rememberMe": "Nikumbuke"
+        }
+      },
+      "forgotPassword": {
+        "title": "Weka upya nywila yako",
+        "fields": {
+          "email": "Barua pepe"
+        },
+        "errors": {
+          "validEmail": "Barua pepe sio halali"
+        },
+        "buttons": {
+          "submit": "Weka upya nywila"
+        }
+      },
+      "register": {
+        "title": "Jiunge na akaunti yako",
+        "fields": {
+          "email": "Barua pepe",
+          "password": "Nywila"
+        },
+        "errors": {
+          "validEmail": "Barua pepe sio halali"
+        },
+        "buttons": {
+          "submit": "Jiunge",
+          "haveAccount": "Una akaunti?"
+        }
+      },
+      "updatePassword": {
+        "title": "Badilisha nywila yako",
+        "fields": {
+          "password": "Nywila mpya",
+          "confirmPassword": "Thibitisha nywila mpya"
+        },
+        "errors": {
+          "confirmPasswordNotMatch": "Nywila hazifanani"
+        },
+        "buttons": {
+          "submit": "Badilisha nywila"
+        }
+      },
+      "error": {
+        "info":  "Umesahau kuongeza {{action}} component kwa {{resource}}.",
+        "404": "Umesahau kuongeza {{resource}} resource.",
+        "resource404": "Je, uliunda nyenzo ya {{resource}}?",
+        "backHome": "Rudi nyumbani"
+      }
+    },
+    "actions": {
+      "list": "Orodha",
+      "create": "Ongeza",
+      "edit": "Hariri",
+      "show": "Onyesha"
+    },
+    "buttons": {
+      "create": "Ongeza",
+      "save": "Hifadhi",
+      "logout": "Toka",
+      "delete": "Futa",
+      "edit": "Hariri",
+      "cancel": "Ghairi",
+      "confirm": "Thibitisha?",
+      "filter": "Chuja",
+      "clear": "Futa",
+      "refresh": "Sasisha",
+      "show": "Onyesha",
+      "undo": "Tendua",
+      "import": "Import",
+      "clone": "Klon",
+      "notAccessTitle": "Hakuna ufikiaji"
+    },
+    "warnWhenUnsavedChanges": "Una mabadiliko yasiyohifadhiwa. Je, unataka kuondoka bila kuhifadhi?",
+    "notifications": {
+      "success": "Operesheni ilifanikiwa!",
+      "error": "Operesheni ilishindwa! (status code: {{statusCode}})",
+      "undoable": "Una {{seconds}} sekunde za kufuta.",
+      "createSuccess": "{{resource}} ilifanikiwa kuundwa.",
+      "createError": "Kosa wakati wa kuunda {{resource}} (status code: {{statusCode}})",
+      "deleteSuccess": "{{resource}} ilifanikiwa kufutwa.",
+      "deleteError": "Kosa wakati wa kufuta {{resource}} (status code: {{statusCode}})",
+      "editSuccess": "{{resource}} ilifanikiwa kuhaririwa.",
+      "editError": "Kosa wakati wa kuhariri {{resource}} (status code: {{statusCode}})",
+      "importProgress": "{{processed}}/{{total}} imported"
+    },
+    "loading": "Inapakia...",
+    "tags": {
+      "clone": "Klon"
+    },
+    "dashboard": {
+      "title": "Dashboard"
+    },
+    "table": {
+      "actions": "Vitendo"
+    }
+  }
+  
