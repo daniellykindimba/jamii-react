@@ -5,6 +5,41 @@ import configs from "./configs";
 
 export const TOKEN_KEY = "kikoba-auth";
 
+const syncUser = async () => {
+  // perform an api call to get the user details
+  const data = await fetch(`${configs.apiUrl}/user/`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+    },
+  });
+
+  data
+    .json()
+    .then(
+      (data: {
+        success: any;
+        id: any;
+        first_name: any;
+        middle_name: any;
+        last_name: any;
+        dp: any;
+        email: any;
+        phone: any;
+        interface_mode: any;
+        is_admin: any;
+        is_staff: any;
+      }) => {
+        localStorage.setItem("user", JSON.stringify(data));
+        localStorage.setItem(
+          "colorMode",
+          data?.interface_mode ? data.interface_mode : "light"
+        );
+      }
+    );
+};
+
 export const authProvider: AuthBindings = {
   login: async ({username, email, password}) => {
     if ((username || email) && password) {
@@ -80,41 +115,11 @@ export const authProvider: AuthBindings = {
     const token = localStorage.getItem(TOKEN_KEY);
     if (!token) {
       return {};
+    }else{
+      // sync the user in background
+      syncUser();
     }
-    // perform an api call to get the user details
-    const data = await fetch(`${configs.apiUrl}/user/`, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
-      },
-    });
-
-    data
-      .json()
-      .then(
-        (data: {
-          success: any;
-          id: any;
-          first_name: any;
-          middle_name: any;
-          last_name: any;
-          dp: any;
-          email: any;
-          phone: any;
-          interface_mode: any;
-          is_admin: any;
-          is_staff: any;
-        }) => {
-          localStorage.setItem("user", JSON.stringify(data));
-          localStorage.setItem(
-            "colorMode",
-            data?.interface_mode ? data.interface_mode : "light"
-          );
-        }
-      );
     const user = localStorage.getItem("user");
-
     if (user) {
       const data = JSON.parse(user);
       return {

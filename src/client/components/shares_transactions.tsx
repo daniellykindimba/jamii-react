@@ -91,9 +91,9 @@ export const KikobaSharesTransactionsComponent: React.FC<Props> = (
       if (data.success) {
         getShares(1);
         props.onUpdate();
-        message.success(data.data.message);
+        message.success(data.message);
       } else {
-        message.error(data.data.message);
+        message.error(data.message);
       }
     }
   };

@@ -38,7 +38,7 @@ export const KikobaMembersToAddSharesComponent: React.FC<Props> = (
     const {data} = await simpleRestProvider.custom!<KikobaMemberData | any>({
       url:
         configs.apiUrl +
-        `/kikoba/${id}/members?page=${start}&limit=${limit}&q=${key}`,
+        `/kikoba/${id}/contributors?page=${start}&limit=${limit}&q=${key}`,
       method: "get",
     })
       .then((res) => {

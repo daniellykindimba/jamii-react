@@ -37,7 +37,7 @@ export interface SystemSettingsData {
 export const Login: React.FC = () => {
   const [recoverPasswordModal, setRecoverPasswordModal] = useState(false);
   const [form] = Form.useForm<ILoginForm>();
-  const {mutate: login, error, isSuccess} = useLogin<ILoginForm>();
+  const {mutate: login, error, isSuccess, isLoading} = useLogin<ILoginForm>();
   const {push} = useNavigation();
   const params = queryString.parse(window.location.search);
   const to = new Array(params.to).filter((value) => value !== null).join(",");
@@ -165,6 +165,8 @@ export const Login: React.FC = () => {
                         type="primary"
                         size="large"
                         htmlType="submit"
+                        loading={isLoading}
+                        disabled={isLoading}
                         block
                       >
                         Sign in
@@ -195,7 +197,10 @@ export const Login: React.FC = () => {
             onCancel={() => setRecoverPasswordModal(false)}
             footer={[]}
           >
-            <RecoverPasswordComponent rand={Math.random()} onFinish={()=>setRecoverPasswordModal(false)} />
+            <RecoverPasswordComponent
+              rand={Math.random()}
+              onFinish={() => setRecoverPasswordModal(false)}
+            />
           </Modal>
         </ThemedLayoutV2>
       </ConfigProvider>

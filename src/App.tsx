@@ -13,7 +13,6 @@ import dataProvider from "@refinedev/simple-rest";
 import {ColorModeContextProvider} from "./contexts/color-mode";
 import {Divider, Menu} from "antd";
 import {
-  BookOutlined,
   DashboardFilled,
   DashboardOutlined,
   HomeOutlined,
@@ -57,102 +56,6 @@ import {KikobaPayoutApproversPage} from "./client/pages/kikoba/payout_approvers"
 import MenuDivider from "antd/es/menu/MenuDivider";
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
-
-const getJamiiMenues = () => {
-  let selectedKey = localStorage.getItem("selected") ?? "/";
-  return [
-    {
-      key: "jamiiHome",
-      selected: selectedKey === "jamiiHome" || selectedKey === "/",
-      title: "Home",
-      icon: (
-        <HomeOutlined
-          style={{
-            color: configs.primaryColor,
-          }}
-        />
-      ),
-      element: <ClientHome />,
-      path: "/home",
-      pathDefination: "/home",
-    },
-    {
-      key: "jamiiVikoba",
-      selected: selectedKey === "jamiiVikoba",
-      title: "Vikoba",
-      icon: (
-        <OrderedListOutlined
-          style={{
-            color: configs.primaryColor,
-          }}
-        />
-      ),
-      element: <ClientVikoba />,
-      path: "/vikoba",
-      pathDefination: "/vikoba",
-    },
-    {
-      key: "jamiiLoans",
-      selected: selectedKey === "jamiiLoans",
-      title: "My Loans",
-      icon: (
-        <MoneyCollectFilled
-          style={{
-            color: configs.primaryColor,
-          }}
-        />
-      ),
-      element: <ClientLoans />,
-      path: "/loans",
-      pathDefination: "/loans",
-    },
-    {
-      key: "jamiiDonations",
-      selected: selectedKey === "jamiiDonations",
-      title: "Donations",
-      icon: (
-        <MoneyCollectFilled
-          style={{
-            color: configs.primaryColor,
-          }}
-        />
-      ),
-      element: <>Comming Soon</>,
-      path: "/donations",
-      pathDefination: "/donations",
-    },
-    {
-      key: "jamiiLearningCenter",
-      selected: selectedKey === "jamiiLearningCenter",
-      title: "Learning Center",
-      icon: (
-        <BookOutlined
-          style={{
-            color: configs.primaryColor,
-          }}
-        />
-      ),
-      element: <>Comming Soon</>,
-      path: "/learningcenter",
-      pathDefination: "/learningcenter",
-    },
-    {
-      key: "jamiiSettings",
-      selected: selectedKey === "jamiiSettings",
-      title: "Settings",
-      icon: (
-        <SettingOutlined
-          style={{
-            color: configs.primaryColor,
-          }}
-        />
-      ),
-      element: <>Comming Soon</>,
-      path: "/settings",
-      pathDefination: "/settings",
-    },
-  ];
-};
 
 const getKikobaMenues = () => {
   let selectedKey = localStorage.getItem("selected") ?? "/";
@@ -355,6 +258,26 @@ function App() {
     getLocale: () => i18n.language,
   };
 
+  const getKikobaId = () => {
+    var kikoba = localStorage.getItem("kikoba");
+    if (kikoba) {
+      var kikobaData = JSON.parse(kikoba);
+      return kikobaData.id;
+    } else {
+      return "";
+    }
+  };
+
+  const getKikobaRegistrationNumber = () => {
+    var kikoba = localStorage.getItem("kikoba");
+    if (kikoba) {
+      var kikobaData = JSON.parse(kikoba);
+      return kikobaData.registrationNumber;
+    } else {
+      return "";
+    }
+  };
+
   return (
     <BrowserRouter>
       <RefineKbarProvider>
@@ -389,28 +312,18 @@ function App() {
                           )}
                           render={(logout) => (
                             <>
-                              {getJamiiMenues().map((menu) => {
-                                return (
-                                  <Menu.Item icon={menu.icon}>
-                                    <Link
-                                      to={menu.path}
-                                      onClick={() => {
-                                        localStorage.setItem(
-                                          "selected",
-                                          menu.key
-                                        );
-                                      }}
-                                      style={{
-                                        fontWeight: menu.selected
-                                          ? "bold"
-                                          : "normal",
-                                      }}
-                                    >
-                                      {menu.title}
-                                    </Link>
-                                  </Menu.Item>
-                                );
-                              })}
+                              <Menu.Item icon={<HomeOutlined />}>
+                                <Link to={"/"}>Home</Link>
+                              </Menu.Item>
+                              <Menu.Item icon={<OrderedListOutlined />}>
+                                <Link to={"/vikoba"}>Vikoba</Link>
+                              </Menu.Item>
+                              <Menu.Item icon={<MoneyCollectFilled />}>
+                                <Link to={"/loans"}>My Loans</Link>
+                              </Menu.Item>
+                              <Menu.Item icon={<MoneyCollectFilled />}>
+                                <Link to={"/donations"}>Donations</Link>
+                              </Menu.Item>
 
                               <MenuDivider color={configs.primaryColor} />
 
@@ -431,13 +344,21 @@ function App() {
                 <Route path="/">
                   <Route index element={<ClientHome />} />
                 </Route>
-                {getJamiiMenues().map((menu) => {
-                  return (
-                    <Route path={menu.pathDefination}>
-                      <Route index element={menu.element} />
-                    </Route>
-                  );
-                })}
+                <Route path="/home">
+                  <Route index element={<ClientHome />} />
+                </Route>
+                <Route path="/vikoba">
+                  <Route index element={<ClientVikoba />} />
+                </Route>
+                <Route path="/loans">
+                  <Route index element={<ClientLoans />} />
+                </Route>
+                <Route path="/donations">
+                  <Route index element={<ClientLoans />} />
+                </Route>
+                <Route path="/learningcenter">
+                  <Route index element={<ClientLoans />} />
+                </Route>
 
                 <Route path="*" element={<ErrorComponent />} />
               </Route>
@@ -459,29 +380,125 @@ function App() {
                         render={(logout) => {
                           return (
                             <>
-                              {getKikobaMenues().map((menu) => {
-                                return (
-                                  <Menu.Item key={menu.key} icon={menu.icon}>
-                                    <Link
-                                      to={menu.path}
-                                      onClick={() => {
-                                        localStorage.setItem(
-                                          "selected",
-                                          menu.key
-                                        );
-                                      }}
-                                      style={{
-                                        fontWeight: menu.selected
-                                          ? "bold"
-                                          : "normal",
-                                      }}
-                                    >
-                                      {menu.title}
-                                    </Link>
-                                  </Menu.Item>
-                                );
-                              })}
+                              <Menu.Item icon={<HomeOutlined />}>
+                                <Link
+                                  to={
+                                    "/vikoba/view/" +
+                                    getKikobaId() +
+                                    "/" +
+                                    getKikobaRegistrationNumber()
+                                  }
+                                >
+                                  Dashboard
+                                </Link>
+                              </Menu.Item>
+
+                              <Menu.Item icon={<OrderedListOutlined />}>
+                                <Link
+                                  to={
+                                    "/vikoba/" +
+                                    getKikobaId() +
+                                    "/distributions"
+                                  }
+                                >
+                                  Distributions
+                                </Link>
+                              </Menu.Item>
+
+                              <Menu.Item icon={<OrderedListOutlined />}>
+                                <Link
+                                  to={
+                                    "/vikoba/" + getKikobaId() + "/transactions"
+                                  }
+                                >
+                                  Share Transactions
+                                </Link>
+                              </Menu.Item>
+
+                              <Menu.Item icon={<OrderedListOutlined />}>
+                                <Link
+                                  to={"/vikoba/" + getKikobaId() + "/loans"}
+                                >
+                                  Loans
+                                </Link>
+                              </Menu.Item>
+
+                              <Menu.Item icon={<OrderedListOutlined />}>
+                                <Link
+                                  to={
+                                    "/vikoba/" +
+                                    getKikobaId() +
+                                    "/initialShares"
+                                  }
+                                >
+                                  Initial Shares
+                                </Link>
+                              </Menu.Item>
+
+                              <Menu.Item icon={<OrderedListOutlined />}>
+                                <Link
+                                  to={"/vikoba/" + getKikobaId() + "/penalties"}
+                                >
+                                  Charges/Penalties
+                                </Link>
+                              </Menu.Item>
+
+                              <Menu.Item icon={<OrderedListOutlined />}>
+                                <Link
+                                  to={"/vikoba/" + getKikobaId() + "/donations"}
+                                >
+                                  Donations
+                                </Link>
+                              </Menu.Item>
+
+                              <Menu.Item icon={<UserSwitchOutlined />}>
+                                <Link
+                                  to={"/vikoba/" + getKikobaId() + "/members"}
+                                >
+                                  Members
+                                </Link>
+                              </Menu.Item>
+
+                              <Menu.Item icon={<UserSwitchOutlined />}>
+                                <Link
+                                  to={"/vikoba/" + getKikobaId() + "/names"}
+                                >
+                                  Names
+                                </Link>
+                              </Menu.Item>
+
+                              <Menu.Item icon={<UserSwitchOutlined />}>
+                                <Link
+                                  to={
+                                    "/vikoba/" +
+                                    getKikobaId() +
+                                    "/loans/approvers"
+                                  }
+                                >
+                                  Loan Approvers
+                                </Link>
+                              </Menu.Item>
+
+                              <Menu.Item icon={<UserSwitchOutlined />}>
+                                <Link
+                                  to={
+                                    "/vikoba/" +
+                                    getKikobaId() +
+                                    "/payouts/approvers"
+                                  }
+                                >
+                                  Payout Approvers
+                                </Link>
+                              </Menu.Item>
+
                               <MenuDivider color={configs.primaryColor} />
+                              <Menu.Item icon={<SettingOutlined />}>
+                                <Link
+                                  to={"/vikoba/" + getKikobaId() + "/settings"}
+                                >
+                                  Settings
+                                </Link>
+                              </Menu.Item>
                               {logout.logout}
                             </>
                           );
@@ -496,13 +513,42 @@ function App() {
                   </ThemedLayoutV2>
                 }
               >
-                {getKikobaMenues().map((menu) => {
-                  return (
-                    <Route path={menu.pathDefination}>
-                      <Route index element={menu.element} />
-                    </Route>
-                  );
-                })}
+                <Route path="/vikoba/view/:id/:registrationNumber">
+                  <Route index element={<KikobaView />} />
+                </Route>
+                <Route path="/vikoba/:id/distributions">
+                  <Route index element={<KikobaDistributionsPage />} />
+                </Route>
+                <Route path="/vikoba/:id/transactions">
+                  <Route index element={<KikobaTransactionsView />} />
+                </Route>
+                <Route path="/vikoba/:id/loans">
+                  <Route index element={<KikobaView />} />
+                </Route>
+                <Route path="/vikoba/:id/initialShares">
+                  <Route index element={<KikobaView />} />
+                </Route>
+                <Route path="/vikoba/:id/penalties">
+                  <Route index element={<KikobaView />} />
+                </Route>
+                <Route path="/vikoba/:id/donations">
+                  <Route index element={<KikobaView />} />
+                </Route>
+                <Route path="/vikoba/:id/members">
+                  <Route index element={<KikobaMembersPage />} />
+                </Route>
+                <Route path="/vikoba/:id/names">
+                  <Route index element={<KikobaNamesPage />} />
+                </Route>
+                <Route path="/vikoba/:id/loans/approvers">
+                  <Route index element={<KikobaLoanApproversPage />} />
+                </Route>
+                <Route path="/vikoba/:id/payouts/approvers">
+                  <Route index element={<KikobaPayoutApproversPage />} />
+                </Route>
+                <Route path="/vikoba/:id/settings">
+                  <Route index element={<KikobaView />} />
+                </Route>
                 <Route path="/control/*" element={<ErrorComponent />} />
               </Route>
 
