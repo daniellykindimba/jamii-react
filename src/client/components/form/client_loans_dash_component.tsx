@@ -49,6 +49,7 @@ interface AnalyticsData {
 
 interface Props {
   onUpdate?: any;
+  isMobile?: boolean;
 }
 
 export const ClientLoansDashComponent: React.FC<Props> = (props: Props) => {
@@ -82,7 +83,7 @@ export const ClientLoansDashComponent: React.FC<Props> = (props: Props) => {
     <>
       <Card
         style={{
-          width: "50vw",
+          width: props.isMobile ? "100vw" : "50vw",
         }}
         title={
           <>
@@ -136,7 +137,7 @@ export const ClientLoansDashComponent: React.FC<Props> = (props: Props) => {
 
       <Modal
         title="Loan Application"
-        width={"40vw"}
+        width={props.isMobile ? "100vw" : "40vw"}
         open={loanApplicationModalVisible}
         onOk={() => {
           setLoanApplicationModalVisible(false);

@@ -1,6 +1,6 @@
 import {SearchOutlined} from "@ant-design/icons";
 import {useActiveAuthProvider, useGetIdentity} from "@refinedev/core";
-import {Button, Col, Form, Input, Modal, Row, Table} from "antd";
+import {Button, Col, Form, Grid, Input, Modal, Row, Table} from "antd";
 import {useEffect, useState} from "react";
 import simpleRestProvider from "../../api";
 import configs from "../../configs";
@@ -27,6 +27,8 @@ export const ControlVikoba: React.FC<Props> = (props: Props) => {
   const {data: user} = useGetIdentity({
     v3LegacyAuthProviderCompatible: Boolean(authProvider?.isLegacy),
   });
+  const breakpoint = Grid.useBreakpoint();
+  const isMobile = !breakpoint.lg;
 
   const handleKikobaModal = (kikoba: KikobaData) => {
     setKikoba(kikoba);
@@ -38,6 +40,7 @@ export const ControlVikoba: React.FC<Props> = (props: Props) => {
       title: "Name",
       dataIndex: "name",
       key: "name",
+      fixed: true,
     },
     {
       title: "Kikoba #",
@@ -132,7 +135,7 @@ export const ControlVikoba: React.FC<Props> = (props: Props) => {
   return (
     <>
       <Row style={{marginTop: 10}}>
-        <Col span={12}>
+        <Col span={isMobile ? 24 : 12}>
           <Form<searchFormData>
             layout="vertical"
             form={searchForm}
@@ -153,6 +156,7 @@ export const ControlVikoba: React.FC<Props> = (props: Props) => {
       <Table
         dataSource={vikobas}
         columns={columns}
+        scroll={{x: true}}
         pagination={{
           total: total,
           pageSize: limit,

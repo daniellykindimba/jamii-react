@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import {Row, Col, Card, Typography, Tag, message} from "antd";
+import ColorModeComponent from "../components/colorMode";
 
 const {Text} = Typography;
 
@@ -14,10 +15,12 @@ const AppFooter = () => {
       }}
     >
       <Col span={24}>
-        <Card style={{
-          display: "flex",
-          justifyContent: "center",
-        }}>
+        <Card
+          style={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
           {/* define menu for privacy policies, cookies , contacts, services */}
           <a onClick={() => message.info("Privacy Policies")}>
             <Tag style={{fontSize: 16, padding: 3}} color="green">
@@ -44,6 +47,15 @@ const AppFooter = () => {
               Help
             </Tag>
           </a>
+
+          <span
+            style={{
+              position: "absolute",
+              right: 20,
+            }}
+          >
+            <ColorModeComponent />
+          </span>
         </Card>
         <Card>
           <div style={{display: "flex", justifyContent: "center"}}>

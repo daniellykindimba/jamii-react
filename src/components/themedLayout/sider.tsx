@@ -32,7 +32,7 @@ const drawerButtonStyles: CSSProperties = {
   borderTopLeftRadius: 0,
   borderBottomLeftRadius: 0,
   position: "fixed",
-  top: 64,
+  top: 13,
   zIndex: 999,
 };
 
@@ -61,13 +61,12 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
   const TitleFromContext = useTitle();
   const translate = useTranslate();
   const {menuItems, selectedKey, defaultOpenKeys} = useMenu({meta});
-  const breakpoint = Grid.useBreakpoint();
   const {hasDashboard} = useRefineContext();
   const authProvider = useActiveAuthProvider();
   const {mutate: mutateLogout} = useLogout({
     v3LegacyAuthProviderCompatible: Boolean(authProvider?.isLegacy),
   });
-
+  const breakpoint = Grid.useBreakpoint();
   const isMobile =
     typeof breakpoint.lg === "undefined" ? false : !breakpoint.lg;
 

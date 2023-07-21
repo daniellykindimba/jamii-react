@@ -9,6 +9,7 @@ import {KikobaPoliciesComponent} from "./kikoba_policies";
 interface Props {
   kikoba: KikobaData | any;
   onUpdate?: any;
+  isMobile?: boolean;
 }
 
 export const KikobaInfosComponent: React.FC<Props> = (props: Props) => {
@@ -37,20 +38,20 @@ export const KikobaInfosComponent: React.FC<Props> = (props: Props) => {
 
   useEffect(() => {
     getKikoba();
-  }, [props.kikoba]);
+  }, [props.kikoba, props.isMobile]);
 
   return (
     <>
       <Row>
         <Col
-          span={16}
+          span={props.isMobile ? 24 : 16}
           style={{
             padding: 10,
           }}
         >
-          <KikobaPoliciesComponent kikoba={props.kikoba} />
+          <KikobaPoliciesComponent kikoba={props.kikoba} isMobile={props.isMobile} />
         </Col>
-        <Col span={8}>
+        <Col span={props.isMobile ? 24 : 8}>
           <Card>
             <Descriptions title="Particular Kikoba Info's" column={1}>
               <Descriptions.Item label="Name">{kikoba?.name}</Descriptions.Item>

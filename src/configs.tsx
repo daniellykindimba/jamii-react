@@ -1,5 +1,5 @@
-// const apiUrl = "http://dev.olbongo.com:3001";
-const apiUrl = "http://api.jamii.co.tz";
+const apiUrl = "http://dev.olbongo.com:3001";
+// const apiUrl = "https://api.jamii.co.tz";
 
 const configs = {
     "system_name": "Jamii",

@@ -4,6 +4,7 @@ import {
   Button,
   Card,
   Col,
+  Grid,
   List,
   Modal,
   Row,
@@ -47,6 +48,7 @@ interface AnalyticsData {
 
 interface Props {
   onUpdate?: any;
+  isMobile?: boolean;
 }
 
 export const ClientContributionsDashComponent: React.FC<Props> = (
@@ -80,7 +82,7 @@ export const ClientContributionsDashComponent: React.FC<Props> = (
     <>
       <Card
         style={{
-          width: "50vw",
+          width: props.isMobile ? "100vw" : "50vw",
         }}
         title="Contributions"
       >

@@ -76,6 +76,11 @@ export const authProvider: AuthBindings = {
   },
   getPermissions: async () => null,
   getIdentity: async () => {
+    // check if the user is logged in
+    const token = localStorage.getItem(TOKEN_KEY);
+    if (!token) {
+      return {};
+    }
     // perform an api call to get the user details
     const data = await fetch(`${configs.apiUrl}/user/`, {
       method: "GET",

@@ -1,4 +1,7 @@
 import React from "react";
+import logo from "../../images/jamii.png";
+import {Avatar} from "antd";
+import configs from "../../configs";
 
 export const AppIcon: React.FC = () => {
   return (
@@ -18,5 +21,18 @@ export const AppIcon: React.FC = () => {
         />
       </g>
     </svg>
+  );
+};
+
+export const AppAvatar: React.FC = () => {
+  return (
+    <Avatar
+      size={100}
+      src={logo}
+      style={{
+        marginBottom: 10,
+        backgroundColor: configs.primaryColor,
+      }}
+    />
   );
 };

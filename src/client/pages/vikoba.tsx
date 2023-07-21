@@ -18,6 +18,7 @@ import {
   Drawer,
   Dropdown,
   Form,
+  Grid,
   Input,
   Modal,
   Pagination,
@@ -52,6 +53,9 @@ export const ClientVikoba: React.FC<Props> = (props: Props) => {
   const [kikoba, setKikoba] = useState<KikobaData>();
   const [viewKikobaInfosModal, setViewKikobaInfosModal] = useState(false);
   const {push} = useNavigation();
+  const breakpoint = Grid.useBreakpoint();
+  const isMobile =
+    typeof breakpoint.lg === "undefined" ? false : !breakpoint.lg;
 
   const getVikoba = async (
     key: string = "",
@@ -209,59 +213,120 @@ export const ClientVikoba: React.FC<Props> = (props: Props) => {
       <div style={{marginTop: 10}}>
         {/* define a search form */}
         <Row>
-          <Col span={14}>
-            <Form
-              name="basic"
-              onFinish={(values) => {
-                getVikoba(values.q, 1, limit);
-              }}
-              onFinishFailed={() => {}}
-              autoComplete="off"
-            >
-              <Form.Item
-                name="q"
-                rules={[
-                  {required: false, message: "Please input your username!"},
-                ]}
+          {isMobile && (
+            <>
+              <Col
+                span={24}
+                style={{display: "flex", justifyContent: "flex-end"}}
               >
-                <Input
+                <Button
                   size="large"
-                  type="search"
-                  placeholder="Search ...."
-                  allowClear
-                />
-              </Form.Item>
-            </Form>
-          </Col>
+                  icon={<FolderAddOutlined />}
+                  type="primary"
+                  shape="round"
+                  style={{
+                    marginRight: 5,
+                  }}
+                >
+                  Join Kikoba
+                </Button>
+                <Button
+                  size="large"
+                  icon={<FolderAddOutlined />}
+                  shape="round"
+                  onClick={() => setCreateNewKikoba(true)}
+                  type="primary"
+                >
+                  Create Kikoba
+                </Button>
+              </Col>
+              <Col span={24} style={{marginTop: 10}}>
+                <Form
+                  name="basic"
+                  onFinish={(values) => {
+                    getVikoba(values.q, 1, limit);
+                  }}
+                  onFinishFailed={() => {}}
+                  autoComplete="off"
+                >
+                  <Form.Item
+                    name="q"
+                    rules={[
+                      {required: false, message: "Please input your username!"},
+                    ]}
+                  >
+                    <Input
+                      size="large"
+                      type="search"
+                      placeholder="Search ...."
+                      allowClear
+                    />
+                  </Form.Item>
+                </Form>
+              </Col>
+            </>
+          )}
 
-          <Col span={10} style={{display: "flex", justifyContent: "flex-end"}}>
-            <Button
-              size="large"
-              icon={<FolderAddOutlined />}
-              type="primary"
-              shape="round"
-              style={{
-                marginRight: 5,
-              }}
-            >
-              Join New Kikoba
-            </Button>
-            <Button
-              size="large"
-              icon={<FolderAddOutlined />}
-              shape="round"
-              onClick={() => setCreateNewKikoba(true)}
-              type="primary"
-            >
-              Create New Kikoba
-            </Button>
-          </Col>
+          {!isMobile && (
+            <>
+              <Col span={14}>
+                <Form
+                  name="basic"
+                  onFinish={(values) => {
+                    getVikoba(values.q, 1, limit);
+                  }}
+                  onFinishFailed={() => {}}
+                  autoComplete="off"
+                >
+                  <Form.Item
+                    name="q"
+                    rules={[
+                      {required: false, message: "Please input your username!"},
+                    ]}
+                  >
+                    <Input
+                      size="large"
+                      type="search"
+                      placeholder="Search ...."
+                      allowClear
+                    />
+                  </Form.Item>
+                </Form>
+              </Col>
+
+              <Col
+                span={10}
+                style={{display: "flex", justifyContent: "flex-end"}}
+              >
+                <Button
+                  size="large"
+                  icon={<FolderAddOutlined />}
+                  type="primary"
+                  shape="round"
+                  style={{
+                    marginRight: 5,
+                  }}
+                >
+                  Join Kikoba
+                </Button>
+                <Button
+                  size="large"
+                  icon={<FolderAddOutlined />}
+                  shape="round"
+                  onClick={() => setCreateNewKikoba(true)}
+                  type="primary"
+                >
+                  Create Kikoba
+                </Button>
+              </Col>
+            </>
+          )}
         </Row>
       </div>
 
       <Spin spinning={loading}>
         <div>
-          <Row gutter={16}>
+          <Row>
             {vikoba?.length === 0 && !loading && (
               <Col span={24}>
                 <Alert message="No Kikoba Found" type="info" />
@@ -270,7 +335,7 @@ export const ClientVikoba: React.FC<Props> = (props: Props) => {
             {/* loop through vikoba and display them here */}
             {vikoba?.map((v) => {
               return (
-                <Col span={8} style={{marginBottom: 10}}>
+                <Col span={isMobile ? 24 : 8} style={{marginBottom: 10}}>
                   <Card
                     title={
                       <>
@@ -365,7 +430,7 @@ export const ClientVikoba: React.FC<Props> = (props: Props) => {
             })}
           </Row>
 
-          {!loading && (
+          {!loading && vikoba.length > 0 && (
             <Row>
               <Col
                 span={24}
@@ -393,7 +458,7 @@ export const ClientVikoba: React.FC<Props> = (props: Props) => {
       <Drawer
         title="Creating New Kikoba"
         placement="right"
-        width={"40vw"}
+        width={isMobile ? "100vw" : "40vw"}
         destroyOnClose={true}
         onClose={() => setCreateNewKikoba(false)}
         open={createNewKikoba}
@@ -404,7 +469,7 @@ export const ClientVikoba: React.FC<Props> = (props: Props) => {
       <Drawer
         title="Updating Kikoba"
         placement="right"
-        width={"40vw"}
+        width={isMobile ? "100vw" : "40vw"}
         destroyOnClose={true}
         onClose={() => setEditKikobaModal(false)}
         open={editKikobaModal}
@@ -414,13 +479,13 @@ export const ClientVikoba: React.FC<Props> = (props: Props) => {
 
       <Modal
         title={kikoba?.name + " Info's"}
-        width={"80vw"}
+        width={isMobile ? "100vw" : "80vw"}
         open={viewKikobaInfosModal}
         onOk={() => setViewKikobaInfosModal(false)}
         onCancel={() => setViewKikobaInfosModal(false)}
         footer={[]}
       >
-        <KikobaInfosComponent kikoba={kikoba} />
+        <KikobaInfosComponent kikoba={kikoba} isMobile={isMobile} />
       </Modal>
     </>
   );

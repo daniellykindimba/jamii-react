@@ -10,6 +10,7 @@ import {EditKikobaPolicyForm} from "./form/edit_kikoba_policy_form";
 interface Props {
   kikoba: KikobaData | any;
   onUpdate?: any;
+  isMobile?: boolean;
 }
 
 export const KikobaPoliciesComponent: React.FC<Props> = (props: Props) => {
@@ -144,7 +145,7 @@ export const KikobaPoliciesComponent: React.FC<Props> = (props: Props) => {
       <Drawer
         title="Adding New Kikoba Policy"
         placement="right"
-        width={"30vw"}
+        width={props.isMobile ? "100vw" : "30vw"}
         destroyOnClose={true}
         onClose={() => setOpen(false)}
         open={open}
@@ -155,7 +156,7 @@ export const KikobaPoliciesComponent: React.FC<Props> = (props: Props) => {
       <Drawer
         title="Updating Kikoba Policy"
         placement="right"
-        width={"30vw"}
+        width={props.isMobile ? "100vw" : "30vw"}
         destroyOnClose={true}
         onClose={() => setEditOpen(false)}
         open={editOpen}

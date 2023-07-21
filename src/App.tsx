@@ -376,7 +376,7 @@ function App() {
                 element={
                   <Authenticated fallback={<CatchAllNavigate to="/login" />}>
                     <ThemedLayoutV2
-                      Header={() => <ThemedHeaderV2 isSticky sticky={true} />}
+                      Header={() => <ThemedHeaderV2 sticky={true} />}
                       Sider={() => (
                         <ThemedSiderV2
                           fixed={true}
@@ -445,7 +445,7 @@ function App() {
               <Route
                 element={
                   <ThemedLayoutV2
-                    Header={() => <ThemedHeaderV2 isSticky sticky={true} />}
+                    Header={() => <ThemedHeaderV2 sticky={true} />}
                     Sider={() => (
                       <ThemedSiderV2
                         fixed={true}
@@ -503,13 +503,13 @@ function App() {
                     </Route>
                   );
                 })}
-                <Route path="/control*" element={<ErrorComponent />} />
+                <Route path="/control/*" element={<ErrorComponent />} />
               </Route>
 
               <Route
                 element={
                   <ThemedLayoutV2
-                    Header={() => <ThemedHeaderV2 isSticky sticky={true} />}
+                    Header={() => <ThemedHeaderV2 sticky={true} />}
                     Sider={() => (
                       <ThemedSiderV2
                         fixed={true}
@@ -635,7 +635,7 @@ function App() {
                   <Route path="roles" element={<ControlRole />} />
                 </Route>
 
-                <Route path="/control*" element={<ErrorComponent />} />
+                <Route path="/control/*" element={<ErrorComponent />} />
               </Route>
 
               <Route

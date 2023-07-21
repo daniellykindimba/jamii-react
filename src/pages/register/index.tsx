@@ -3,7 +3,6 @@ import {LoginOutlined} from "@ant-design/icons";
 import {ThemedLayoutV2} from "@refinedev/antd";
 import {
   Alert,
-  Avatar,
   Button,
   Card,
   Col,
@@ -21,14 +20,12 @@ import configs from "../../configs";
 import AppFooter from "../footer";
 import {useNavigation} from "@refinedev/core";
 import queryString from "query-string";
+import {AppAvatar} from "../../components/app-icon";
 
 const {Text, Title} = Typography;
 
 export interface registerForm {
-  firstName: string;
-  middleName: string;
-  lastName: string;
-  email: string;
+  fullName: string;
   phone: string;
   password: string;
   confirmPassword: string;
@@ -52,9 +49,6 @@ export const Register: React.FC = () => {
   const [userVerifiedMessage, setUserVerifiedMessage] = useState("");
   const [verifyingOtp, setVerifyingOtp] = useState(false);
   const [verifyForm] = Form.useForm<verifyOtpForm>();
-  const [loginRedeem, setLoginRedeem] = useState(false);
-  const [successfullyLoggedIn, setSuccessfullyLoggedIn] = useState(false);
-  const [failedLogin, setFailedLogin] = useState(false);
   const {push} = useNavigation();
   const params = queryString.parse(window.location.search);
   const to = new Array(params.to).filter((value) => value !== null).join(",");
@@ -108,19 +102,13 @@ export const Register: React.FC = () => {
       .catch((err) => {
         return {data: null};
       });
-
-    console.log("=======OTP requesting");
-    console.log(data);
   };
 
   const customRegister = async (values: registerForm) => {
     message.destroy();
     setPhone(values.phone);
     let formData = new FormData();
-    formData.append("first_name", values.firstName);
-    formData.append("middle_name", values.middleName);
-    formData.append("last_name", values.lastName);
-    formData.append("email", values.email);
+    formData.append("full_name", values.fullName);
     formData.append("phone", values.phone);
     formData.append("password", values.password);
     formData.append("confirm_password", values.confirmPassword);
@@ -182,14 +170,7 @@ export const Register: React.FC = () => {
                       span={24}
                       style={{display: "flex", justifyContent: "center"}}
                     >
-                      <Avatar
-                        size={100}
-                        src={configs.logo}
-                        style={{
-                          marginBottom: 10,
-                          backgroundColor: configs.primaryColor,
-                        }}
-                      />
+                      <AppAvatar />
                     </Col>
                     <Col
                       span={24}
@@ -253,65 +234,39 @@ export const Register: React.FC = () => {
                       }}
                     >
                       <Form.Item
-                        name="firstName"
+                        name="fullName"
                         label={
                           <div>
-                            <span>First Name</span>
+                            <span>Enter Your Full Name</span>
                           </div>
                         }
                         rules={[
                           {
                             required: true,
                             type: "string",
-                            message: "Enter First Name ...",
+                            message: "Enter Your Full Name ...",
                           },
-                        ]}
-                      >
-                        <Input
-                          size="large"
-                          placeholder="Enter First Name ..."
-                          onChange={(e) => {}}
-                        />
-                      </Form.Item>
-                      <Form.Item
-                        name="middleName"
-                        label={
-                          <div>
-                            <span>Middle Name</span>
-                          </div>
-                        }
-                        rules={[
+                          // custom validation for full name
                           {
-                            required: true,
-                            type: "string",
-                            message: "Enter Middle Name ...",
+                            validator: async (_, fullName) => {
+                              if (fullName) {
+                                // strip white spaces
+                                fullName = fullName.trim();
+                                if (fullName.split(" ").length < 2) {
+                                  return Promise.reject(
+                                    "Enter Your Full Name ..."
+                                  );
+                                } else {
+                                  return Promise.resolve();
+                                }
+                              }
+                            },
                           },
                         ]}
                       >
                         <Input
                           size="large"
-                          placeholder="Enter Middle Name ..."
-                          onChange={(e) => {}}
-                        />
-                      </Form.Item>
-                      <Form.Item
-                        name="lastName"
-                        label={
-                          <div>
-                            <span>Last Name</span>
-                          </div>
-                        }
-                        rules={[
-                          {
-                            required: true,
-                            type: "string",
-                            message: "Enter Last Name ...",
-                          },
-                        ]}
-                      >
-                        <Input
-                          size="large"
-                          placeholder="Enter Last Name ..."
+                          placeholder="Enter Your Full Name ..."
                           onChange={(e) => {}}
                         />
                       </Form.Item>
@@ -332,30 +287,35 @@ export const Register: React.FC = () => {
                           {
                             validator: async (_, phone) => {
                               if (phone) {
-                                let formData = new FormData();
-                                formData.append("phone", phone);
+                                // check if phone length is 9 digits or more
+                                if (phone.length >= 9) {
+                                  let formData = new FormData();
+                                  formData.append("phone", phone);
 
-                                const data = await simpleRestProvider.custom!({
-                                  method: "post",
-                                  url: configs.apiUrl + "/validate/phone",
-                                  headers: {
-                                    "Content-Type": "multipart/form-data",
-                                  },
-                                  payload: formData,
-                                })
-                                  .then((res) => {
-                                    return res;
-                                  })
-                                  .catch((err) => {
-                                    message.error("Error Occured");
-                                    return null;
-                                  });
-                                console.log(data);
-                                if (data) {
-                                  if (data.data.success) {
-                                    return Promise.resolve();
-                                  } else {
-                                    return Promise.reject(data.data.message);
+                                  const data = await simpleRestProvider.custom!(
+                                    {
+                                      method: "post",
+                                      url: configs.apiUrl + "/validate/phone",
+                                      headers: {
+                                        "Content-Type": "multipart/form-data",
+                                      },
+                                      payload: formData,
+                                    }
+                                  )
+                                    .then((res) => {
+                                      return res;
+                                    })
+                                    .catch((err) => {
+                                      message.error("Error Occured");
+                                      return null;
+                                    });
+                                  console.log(data);
+                                  if (data) {
+                                    if (data.data.success) {
+                                      return Promise.resolve();
+                                    } else {
+                                      return Promise.reject(data.data.message);
+                                    }
                                   }
                                 }
                               }
@@ -402,27 +362,6 @@ export const Register: React.FC = () => {
                           size="large"
                           prefix="+255"
                           placeholder="Enter Mobile Phone Number ..."
-                          onChange={(e) => {}}
-                        />
-                      </Form.Item>
-                      <Form.Item
-                        name="email"
-                        label={
-                          <div>
-                            <span>Email Address</span>
-                          </div>
-                        }
-                        rules={[
-                          {
-                            required: false,
-                            type: "string",
-                            message: "Enter Email Address ...",
-                          },
-                        ]}
-                      >
-                        <Input
-                          size="large"
-                          placeholder="Enter Email Address ..."
                           onChange={(e) => {}}
                         />
                       </Form.Item>

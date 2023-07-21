@@ -36,6 +36,7 @@ interface AnalyticsData {
 
 interface Props {
   onUpdate?: any;
+  isMobile?: boolean;
 }
 
 export const ClientChargesDashComponent: React.FC<Props> = (props: Props) => {
@@ -72,7 +73,7 @@ export const ClientChargesDashComponent: React.FC<Props> = (props: Props) => {
     <>
       <Card
         style={{
-          width: "50vw",
+          width: props.isMobile ? "100vw" : "50vw",
         }}
         title="Charges/Penalities"
       >
@@ -110,7 +111,7 @@ export const ClientChargesDashComponent: React.FC<Props> = (props: Props) => {
 
       <Modal
         title="Add/Pay Contribution"
-        width={"40vw"}
+        width={props.isMobile ? "100vw" : "40vw"}
         open={addContributionModalVisible}
         onOk={() => setAddContributionModalVisible(false)}
         onCancel={() => setAddContributionModalVisible(false)}
@@ -123,7 +124,7 @@ export const ClientChargesDashComponent: React.FC<Props> = (props: Props) => {
 
       <Modal
         title="Contributions"
-        width={"40vw"}
+        width={props.isMobile ? "100vw" : "40vw"}
         open={viewContributionsModalVisible}
         onOk={() => setViewContributionsModalVisible(false)}
         onCancel={() => setViewContributionsModalVisible(false)}

@@ -1,6 +1,16 @@
-import {SearchOutlined} from "@ant-design/icons";
+import {KeyOutlined, SearchOutlined} from "@ant-design/icons";
 import {useActiveAuthProvider, useGetIdentity} from "@refinedev/core";
-import {Col, Form, Input, Row, Table} from "antd";
+import {
+  Button,
+  Col,
+  Form,
+  Grid,
+  Input,
+  Popconfirm,
+  Row,
+  Table,
+  message,
+} from "antd";
 import {useEffect, useState} from "react";
 import simpleRestProvider from "../../api";
 import configs from "../../configs";
@@ -22,6 +32,8 @@ export const ControlMembers: React.FC<Props> = (props: Props) => {
   const {data: user} = useGetIdentity({
     v3LegacyAuthProviderCompatible: Boolean(authProvider?.isLegacy),
   });
+  const breakpoint = Grid.useBreakpoint();
+  const isMobile = !breakpoint.lg;
 
   const [searchForm] = Form.useForm<searchFormData>();
 
@@ -30,6 +42,7 @@ export const ControlMembers: React.FC<Props> = (props: Props) => {
       title: "First Name",
       dataIndex: "name",
       key: "name",
+      fixed: true,
       render: (text: any, row: any, index: any) => (
         <>
           <span>{row.firstName}</span>
@@ -84,6 +97,20 @@ export const ControlMembers: React.FC<Props> = (props: Props) => {
       ),
       dataIndex: "actions",
       key: "actions",
+      render: (text: any, row: any, index: any) => (
+        <>
+          <Popconfirm
+            title="Reset User Password"
+            description="Are you sure to reset user Password?"
+            onConfirm={() => resetPassword(row.id)}
+            onCancel={() => {}}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button icon={<KeyOutlined />} style={{float: "right"}}></Button>
+          </Popconfirm>
+        </>
+      ),
     },
   ];
 
@@ -113,6 +140,23 @@ export const ControlMembers: React.FC<Props> = (props: Props) => {
     setLoading(false);
   };
 
+  const resetPassword = async (user_id: number) => {
+    const {data} = await simpleRestProvider.custom!<RegionData | any>({
+      url: configs.apiUrl + `/user/${user_id}/password/reset`,
+      method: "get",
+    })
+      .then((res) => {
+        return res;
+      })
+      .catch((error) => {
+        return {data: null};
+      });
+
+    if (data) {
+      message.success("Password Reset Successful");
+    }
+  };
+
   useEffect(() => {
     if ((user?.isAdmin || user?.isStaff) === false) {
       window.location.href = "/";
@@ -124,7 +168,7 @@ export const ControlMembers: React.FC<Props> = (props: Props) => {
   return (
     <>
       <Row style={{marginTop: 10}}>
-        <Col span={12}>
+        <Col span={isMobile ? 24 : 12}>
           <Form<searchFormData>
             layout="vertical"
             form={searchForm}
@@ -148,6 +192,7 @@ export const ControlMembers: React.FC<Props> = (props: Props) => {
         <Table
           dataSource={members}
           columns={columns}
+          scroll={{x: true}}
           pagination={{
             total: total,
             pageSize: limit,

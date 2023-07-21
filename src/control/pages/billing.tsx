@@ -106,6 +106,7 @@ export const ControlBilling: React.FC<Props> = (props: Props) => {
     {
       title: "Reference",
       dataIndex: "reference",
+      fixed: true,
       render: (text: any, row: any, index: any) => (
         <span>
           <a>{row.reference}</a>
@@ -263,35 +264,80 @@ export const ControlBilling: React.FC<Props> = (props: Props) => {
   return (
     <>
       <Row style={{marginTop: 10}}>
-        <Col span={12}>
-          <Form<RegionsSearchFormData>
-            layout="vertical"
-            form={searchForm}
-            onFinish={(values) => {
-              setPage(1);
-              billings.length = 0;
-              getBillings(1, values.key, limit);
-            }}
-          >
-            <Form.Item name="key">
-              <Input
-                size="large"
-                placeholder="Search ..."
-                prefix={<SearchOutlined />}
-                autoComplete="off"
-                allowClear
-              />
-            </Form.Item>
-          </Form>
-        </Col>
+        {isMobile && (
+          <>
+            <Col span={24}>
+              <div style={{float: "right"}}>
+                <Button
+                  type="primary"
+                  size="large"
+                  onClick={setAllBillsServices}
+                >
+                  Settle All Bills Services
+                </Button>
+              </div>
+            </Col>
+            <Col span={24} style={{marginTop: 5}}>
+              <Form<RegionsSearchFormData>
+                layout="vertical"
+                form={searchForm}
+                onFinish={(values) => {
+                  setPage(1);
+                  billings.length = 0;
+                  getBillings(1, values.key, limit);
+                }}
+              >
+                <Form.Item name="key">
+                  <Input
+                    size="large"
+                    placeholder="Search ..."
+                    prefix={<SearchOutlined />}
+                    autoComplete="off"
+                    allowClear
+                  />
+                </Form.Item>
+              </Form>
+            </Col>
+          </>
+        )}
 
-        <Col span={12}>
-          <div style={{float: "right"}}>
-            <Button type="primary" size="large" onClick={setAllBillsServices}>
-              Settle All Bills Services
-            </Button>
-          </div>
-        </Col>
+        {!isMobile && (
+          <>
+            <Col span={12}>
+              <Form<RegionsSearchFormData>
+                layout="vertical"
+                form={searchForm}
+                onFinish={(values) => {
+                  setPage(1);
+                  billings.length = 0;
+                  getBillings(1, values.key, limit);
+                }}
+              >
+                <Form.Item name="key">
+                  <Input
+                    size="large"
+                    placeholder="Search ..."
+                    prefix={<SearchOutlined />}
+                    autoComplete="off"
+                    allowClear
+                  />
+                </Form.Item>
+              </Form>
+            </Col>
+
+            <Col span={12}>
+              <div style={{float: "right"}}>
+                <Button
+                  type="primary"
+                  size="large"
+                  onClick={setAllBillsServices}
+                >
+                  Settle All Bills Services
+                </Button>
+              </div>
+            </Col>
+          </>
+        )}
       </Row>
 
       <div>

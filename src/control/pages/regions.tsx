@@ -43,8 +43,6 @@ export const ControlRegions: React.FC<Props> = (props: Props) => {
     v3LegacyAuthProviderCompatible: Boolean(authProvider?.isLegacy),
   });
   
-  
-  
   const [region, setRegion] = useState<RegionData>();
   const [regions, setRegions] = useState<RegionData[]>([]);
   const [page, setPage] = useState(1);

@@ -2,21 +2,22 @@
 import {ThemedLayoutV2} from "@refinedev/antd";
 import {useLogin, useNavigation} from "@refinedev/core";
 import {
-  Avatar,
   Button,
   Card,
   Col,
   ConfigProvider,
   Form,
   Input,
+  Modal,
   Row,
   Typography,
 } from "antd";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import configs from "../../configs";
 import AppFooter from "../footer";
 import queryString from "query-string";
-import logo from "../../images/jamii.png";
+import {RecoverPasswordComponent} from "../forgotPassword";
+import {AppAvatar} from "../../components/app-icon";
 
 const {Text, Title} = Typography;
 
@@ -34,6 +35,7 @@ export interface SystemSettingsData {
 }
 
 export const Login: React.FC = () => {
+  const [recoverPasswordModal, setRecoverPasswordModal] = useState(false);
   const [form] = Form.useForm<ILoginForm>();
   const {mutate: login, error, isSuccess} = useLogin<ILoginForm>();
   const {push} = useNavigation();
@@ -41,9 +43,7 @@ export const Login: React.FC = () => {
   const to = new Array(params.to).filter((value) => value !== null).join(",");
 
   const customLogin = async (values: ILoginForm) => {
-    login(
-      values, 
-    );
+    login(values);
   };
 
   const CardTitle = (
@@ -79,14 +79,7 @@ export const Login: React.FC = () => {
                       span={24}
                       style={{display: "flex", justifyContent: "center"}}
                     >
-                      <Avatar
-                        size={100}
-                        src={logo}
-                        style={{
-                          marginBottom: 10,
-                          backgroundColor: configs.primaryColor,
-                        }}
-                      />
+                      <AppAvatar />
                     </Col>
                     <Col
                       span={24}
@@ -163,19 +156,14 @@ export const Login: React.FC = () => {
                             float: "right",
                             fontSize: "16px",
                           }}
-                          onClick={() => push("/forgot_password")}
+                          onClick={() => setRecoverPasswordModal(true)}
                         >
                           Forgot password?
                         </a>
                       </div>
                       <Button
-                        type="ghost"
+                        type="primary"
                         size="large"
-                        style={{
-                          backgroundColor: "red",
-                          color: "white",
-                          fontWeight: "bolder",
-                        }}
                         htmlType="submit"
                         block
                       >
@@ -198,6 +186,17 @@ export const Login: React.FC = () => {
               </div>
             </Col>
           </Row>
+
+          <Modal
+            title="Recover Password"
+            open={recoverPasswordModal}
+            destroyOnClose={true}
+            onOk={() => setRecoverPasswordModal(false)}
+            onCancel={() => setRecoverPasswordModal(false)}
+            footer={[]}
+          >
+            <RecoverPasswordComponent rand={Math.random()} onFinish={()=>setRecoverPasswordModal(false)} />
+          </Modal>
         </ThemedLayoutV2>
       </ConfigProvider>
     </>

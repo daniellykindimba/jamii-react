@@ -8,14 +8,13 @@ import {
   Layout as AntdLayout,
   MenuProps,
   Space,
-  Switch,
   theme,
   Typography,
 } from "antd";
-import React, {useContext} from "react";
+import React from "react";
 import {useTranslation} from "react-i18next";
-import {ColorModeContext} from "../../contexts/color-mode";
 import configs from "../../configs";
+import ColorModeComponent from "../colorMode";
 
 const {Text} = Typography;
 const {useToken} = theme;
@@ -34,7 +33,6 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
   const locale = useGetLocale();
   const changeLanguage = useSetLocale();
   const {data: user} = useGetIdentity<IUser>();
-  const {mode, setMode} = useContext(ColorModeContext);
 
   const currentLocale = locale();
 
@@ -74,7 +72,9 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
 
   return (
     <AntdLayout.Header style={headerStyles}>
+      
       <Space>
+      <span><Text>Menu</Text></span>
         <Dropdown
           menu={{
             items: menuItems,
@@ -95,12 +95,7 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
             </Space>
           </Button>
         </Dropdown>
-        <Switch
-          checkedChildren="🌛"
-          unCheckedChildren="🔆"
-          onChange={() => setMode(mode === "light" ? "dark" : "light")}
-          defaultChecked={mode === "dark"}
-        />
+        <ColorModeComponent />
         <Space style={{marginLeft: "8px"}} size="middle">
           {user?.name && <Text strong>{user.name}</Text>}
           {user?.avatar && (

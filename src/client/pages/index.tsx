@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {ClientPaymentsComponent} from "../components/client_payments_component";
 import {ClientContributionsComponent} from "../components/client_contributions_component";
-import {Button, Card, Col, Drawer, Row, Table} from "antd";
+import {Button, Card, Col, Drawer, Grid, Row, Table} from "antd";
 import {UserContributionsComponent} from "../components/user_contributions";
 import {UserLoanRepaymentsComponent} from "../components/user_loan_repayments_component";
 import {OrderedListOutlined} from "@ant-design/icons";
@@ -11,6 +11,10 @@ interface Props {}
 export const ClientHome: React.FC<Props> = (props: Props) => {
   const [openContributionsModal, setOpenContributionsModal] = useState(false);
   const [openLoanRepaymentsModal, setOpenLoanRepaymentsModal] = useState(false);
+  const breakpoint = Grid.useBreakpoint();
+  const isMobile =
+    typeof breakpoint.lg === "undefined" ? false : !breakpoint.lg;
+
   useEffect(() => {}, []);
 
   return (
@@ -28,7 +32,7 @@ export const ClientHome: React.FC<Props> = (props: Props) => {
       </div>
 
       <Row>
-        <Col span={12}>
+        <Col span={isMobile ? 24 : 12}>
           <Card
             title={
               <div
@@ -45,7 +49,7 @@ export const ClientHome: React.FC<Props> = (props: Props) => {
               </div>
             }
             bodyStyle={{
-              padding: 0
+              padding: 0,
             }}
           >
             <div>
@@ -54,7 +58,7 @@ export const ClientHome: React.FC<Props> = (props: Props) => {
           </Card>
         </Col>
 
-        <Col span={12}>
+        <Col span={isMobile ? 24 : 12}>
           <Card
             title={
               <div
@@ -71,7 +75,7 @@ export const ClientHome: React.FC<Props> = (props: Props) => {
               </div>
             }
             bodyStyle={{
-              padding: 0
+              padding: 0,
             }}
           >
             <div>
@@ -85,7 +89,7 @@ export const ClientHome: React.FC<Props> = (props: Props) => {
         title="Contributions"
         placement="right"
         destroyOnClose={true}
-        width={"80vw"}
+        width={isMobile ? "100vw" : "80vw"}
         onClose={() => {
           setOpenContributionsModal(false);
         }}
@@ -98,7 +102,7 @@ export const ClientHome: React.FC<Props> = (props: Props) => {
         title="Loans Repayments"
         placement="right"
         destroyOnClose={true}
-        width={"80vw"}
+        width={isMobile ? "100vw" : "80vw"}
         onClose={() => {
           setOpenLoanRepaymentsModal(false);
         }}
