@@ -96,6 +96,7 @@ export const KikobaMembersToAddInitialSharesComponent: React.FC<Props> = (
         <List
           bordered
           dataSource={members}
+          loading={loading}
           renderItem={(m) => (
             <List.Item
               actions={[

@@ -28,6 +28,7 @@ interface Props {
 }
 
 export const KikobaInitialSharesComponent: React.FC<Props> = (props: Props) => {
+  const [loading, setLoading] = useState(false);
   const [shares, setShares] = useState<KikobaContributionData[]>([]);
   const [addingSharesModalVisible, setAddingSharesModalVisible] =
     useState(false);
@@ -39,6 +40,7 @@ export const KikobaInitialSharesComponent: React.FC<Props> = (props: Props) => {
     key: string = "",
     limit: number = 25
   ) => {
+    setLoading(true);
     const {data} = await simpleRestProvider.custom!<
       KikobaContributionData | any
     >({
@@ -60,6 +62,7 @@ export const KikobaInitialSharesComponent: React.FC<Props> = (props: Props) => {
         }
       }
     }
+    setLoading(false);
   };
 
   const deleteShare = async (id: number) => {
@@ -128,6 +131,7 @@ export const KikobaInitialSharesComponent: React.FC<Props> = (props: Props) => {
             bordered
             itemLayout="horizontal"
             dataSource={shares}
+            loading={loading}
             renderItem={(item) => {
               var fullName = `${item.kikobaMember.member.firstName} ${item.kikobaMember.member.middleName} ${item.kikobaMember.member.lastName}`;
               return (

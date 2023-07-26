@@ -336,95 +336,99 @@ export const ClientVikoba: React.FC<Props> = (props: Props) => {
             {vikoba?.map((v) => {
               return (
                 <Col span={isMobile ? 24 : 8} style={{marginBottom: 10}}>
-                  <Card
-                    title={
-                      <>
-                        <span>{v.name}</span>
-                        <Tag color="green" style={{marginLeft: 5}}>
-                          {v.registrationNumber}
-                        </Tag>
-                        <span style={{float: "right"}}>{getMenu(v)}</span>
-                      </>
-                    }
-                    bordered={false}
-                  >
-                    <div>
-                      <Descriptions bordered size={"small"} column={1}>
-                        <Descriptions.Item label="Initial Share">
-                          {new Intl.NumberFormat("en-US", {
-                            style: "currency",
-                            currency: "TZS",
-                          })
-                            .formatToParts(v.initialShare)
-                            .map((p) =>
-                              p.type !== "literal" && p.type !== "currency"
-                                ? p.value
-                                : ""
-                            )
-                            .join("")}
-                        </Descriptions.Item>
-                        <Descriptions.Item label="Contribution Frequency">
-                          {v.contributionType}
-                        </Descriptions.Item>
-                        <Descriptions.Item label="Contribution Amount">
-                          {new Intl.NumberFormat("en-US", {
-                            style: "currency",
-                            currency: "TZS",
-                          })
-                            .formatToParts(v.contributionAmount)
-                            .map((p) =>
-                              p.type !== "literal" && p.type !== "currency"
-                                ? p.value
-                                : ""
-                            )
-                            .join("")}
-                        </Descriptions.Item>
-                        <Descriptions.Item label="Interest Rate">
-                          {v.interestRate}
-                        </Descriptions.Item>
-                        <Descriptions.Item label="Start Date">
-                          {moment(v.startDate).format("D/MM/YYYY")}
-                        </Descriptions.Item>
-                        <Descriptions.Item label="End Date">
-                          {moment(v.endDate).format("D/MM/YYYY")}
-                        </Descriptions.Item>
-                        <Descriptions.Item label="Region/District">
-                          {v.region.name}/{v.district.name}
-                        </Descriptions.Item>
-                      </Descriptions>
-                    </div>
-
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        marginTop: 10,
-                      }}
+                  <div style={{
+                    margin: 5,
+                  }}>
+                    <Card
+                      title={
+                        <>
+                          <span>{v.name}</span>
+                          <Tag color="green" style={{marginLeft: 5}}>
+                            {v.registrationNumber}
+                          </Tag>
+                          <span style={{float: "right"}}>{getMenu(v)}</span>
+                        </>
+                      }
+                      bordered={false}
                     >
-                      <Button
-                        type="primary"
-                        icon={<FolderOpenOutlined />}
-                        onClick={() => {
-                          //store the kikoba in the local storage
-                          localStorage.setItem(
-                            "kikoba",
-                            JSON.stringify({
-                              id: v.id,
-                              name: v.name,
-                              registrationNumber: v.registrationNumber,
+                      <div>
+                        <Descriptions bordered size={"small"} column={1}>
+                          <Descriptions.Item label="Initial Share">
+                            {new Intl.NumberFormat("en-US", {
+                              style: "currency",
+                              currency: "TZS",
                             })
-                          );
-                          push(
-                            `/vikoba/view/${
-                              v.id
-                            }/${v.registrationNumber.replace("/", "-")}`
-                          );
+                              .formatToParts(v.initialShare)
+                              .map((p) =>
+                                p.type !== "literal" && p.type !== "currency"
+                                  ? p.value
+                                  : ""
+                              )
+                              .join("")}
+                          </Descriptions.Item>
+                          <Descriptions.Item label="Contribution Frequency">
+                            {v.contributionType}
+                          </Descriptions.Item>
+                          <Descriptions.Item label="Contribution Amount">
+                            {new Intl.NumberFormat("en-US", {
+                              style: "currency",
+                              currency: "TZS",
+                            })
+                              .formatToParts(v.contributionAmount)
+                              .map((p) =>
+                                p.type !== "literal" && p.type !== "currency"
+                                  ? p.value
+                                  : ""
+                              )
+                              .join("")}
+                          </Descriptions.Item>
+                          <Descriptions.Item label="Interest Rate">
+                            {v.interestRate}
+                          </Descriptions.Item>
+                          <Descriptions.Item label="Start Date">
+                            {moment(v.startDate).format("D/MM/YYYY")}
+                          </Descriptions.Item>
+                          <Descriptions.Item label="End Date">
+                            {moment(v.endDate).format("D/MM/YYYY")}
+                          </Descriptions.Item>
+                          <Descriptions.Item label="Region/District">
+                            {v.region.name}/{v.district.name}
+                          </Descriptions.Item>
+                        </Descriptions>
+                      </div>
+
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          marginTop: 10,
                         }}
                       >
-                        Open
-                      </Button>
-                    </div>
-                  </Card>
+                        <Button
+                          type="primary"
+                          icon={<FolderOpenOutlined />}
+                          onClick={() => {
+                            //store the kikoba in the local storage
+                            localStorage.setItem(
+                              "kikoba",
+                              JSON.stringify({
+                                id: v.id,
+                                name: v.name,
+                                registrationNumber: v.registrationNumber,
+                              })
+                            );
+                            push(
+                              `/vikoba/view/${
+                                v.id
+                              }/${v.registrationNumber.replace("/", "-")}`
+                            );
+                          }}
+                        >
+                          Open
+                        </Button>
+                      </div>
+                    </Card>
+                  </div>
                 </Col>
               );
             })}

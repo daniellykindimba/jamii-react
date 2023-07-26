@@ -54,9 +54,11 @@ interface Props {
 export const ClientContributionsDashComponent: React.FC<Props> = (
   props: Props
 ) => {
+  const [loading, setLoading] = useState(false);
   const [analytics, setAnalytics] = useState<AnalyticsData | any>({});
 
   const getAnalytics = async () => {
+    setLoading(true);
     const {data} = await simpleRestProvider.custom!<
       KikobaContributionData | any
     >({
@@ -72,6 +74,7 @@ export const ClientContributionsDashComponent: React.FC<Props> = (
     if (data) {
       setAnalytics(data.data);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -91,6 +94,7 @@ export const ClientContributionsDashComponent: React.FC<Props> = (
             <Col span={12}>
               <Statistic
                 title="Total Paid"
+                loading={loading}
                 value={analytics.total_paid}
                 formatter={
                   isFloat(analytics.total_paid) ? undefined : formatter

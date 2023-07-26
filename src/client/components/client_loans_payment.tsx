@@ -32,11 +32,13 @@ interface Props {
 }
 
 export const ClientLoanPaymentComponent: React.FC<Props> = (props: Props) => {
+  const [loading, setLoading] = useState(true);
   const [loans, setLoans] = useState<KikobaLoanData[]>([]);
   const [loan, setLoan] = useState<KikobaLoanData | any>(null);
   const [contributionModal, setContributionModal] = useState(false);
 
   const getKikobas = async () => {
+    setLoading(true);
     const {data} = await simpleRestProvider.custom!({
       url: configs.apiUrl + `/kikobas/me/loans`,
       method: "get",
@@ -52,6 +54,7 @@ export const ClientLoanPaymentComponent: React.FC<Props> = (props: Props) => {
         setLoans(data.data);
       }
     }
+    setLoading(false);
   };
 
   const handleLoanPaymentModal = (loan: KikobaLoanData) => {
@@ -74,6 +77,7 @@ export const ClientLoanPaymentComponent: React.FC<Props> = (props: Props) => {
         <List
           bordered
           dataSource={loans}
+          loading={loading}
           renderItem={(loan: KikobaLoanData) => (
             <List.Item
               actions={[

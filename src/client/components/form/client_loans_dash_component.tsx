@@ -53,11 +53,13 @@ interface Props {
 }
 
 export const ClientLoansDashComponent: React.FC<Props> = (props: Props) => {
+  const [loading, setLoading] = useState(false);
   const [analytics, setAnalytics] = useState<AnalyticsData | any>({});
   const [loanApplicationModalVisible, setLoanApplicationModalVisible] =
     useState(false);
 
   const getAnalytics = async () => {
+    setLoading(true);
     const {data} = await simpleRestProvider.custom!<
       KikobaContributionData | any
     >({
@@ -73,6 +75,7 @@ export const ClientLoansDashComponent: React.FC<Props> = (props: Props) => {
     if (data) {
       setAnalytics(data.data);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -109,6 +112,7 @@ export const ClientLoansDashComponent: React.FC<Props> = (props: Props) => {
             <Col span={12}>
               <Statistic
                 title="Total Paid"
+                loading={loading}
                 value={analytics.total_paid}
                 formatter={
                   isFloat(analytics.total_paid) ? undefined : formatter
@@ -121,6 +125,7 @@ export const ClientLoansDashComponent: React.FC<Props> = (props: Props) => {
             <Col span={12}>
               <Statistic
                 title="Total Not Paid"
+                loading={loading}
                 value={analytics.total_unpaid}
                 precision={2}
                 formatter={

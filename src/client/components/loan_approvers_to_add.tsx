@@ -1,21 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import {
-  PlusOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-import {
-  Avatar,
-  Button,
-  List,
-  Popconfirm,
-  message,
-} from "antd";
-import { useState, useEffect } from "react";
+import {PlusOutlined, UserOutlined} from "@ant-design/icons";
+import {Avatar, Button, List, Popconfirm, message} from "antd";
+import {useState, useEffect} from "react";
 import simpleRestProvider from "../../api";
 import configs from "../../configs";
-import { KikobaMemberData, RegionData } from "../../interfaces";
-
-
+import {KikobaMemberData, RegionData} from "../../interfaces";
 
 interface Props {
   kikoba: number | any;
@@ -94,7 +83,9 @@ export const LoansApproversToAddComponent: React.FC<Props> = (props: Props) => {
       <List
         size="small"
         bordered
-        dataSource={members}
+        dataSource={members.filter(
+          (member) => member.contributionName.length === 0
+        )}
         renderItem={(item) => (
           <List.Item
             actions={[
@@ -121,9 +112,14 @@ export const LoansApproversToAddComponent: React.FC<Props> = (props: Props) => {
             ]}
           >
             <List.Item.Meta
-              avatar={<Avatar icon={<UserOutlined />} style={{
-                backgroundColor: configs.primaryColor,
-              }}/>}
+              avatar={
+                <Avatar
+                  icon={<UserOutlined />}
+                  style={{
+                    backgroundColor: configs.primaryColor,
+                  }}
+                />
+              }
               title={
                 <a>
                   {item.member.firstName} {item.member.middleName}{" "}

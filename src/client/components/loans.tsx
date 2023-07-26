@@ -36,6 +36,7 @@ interface Props {
 }
 
 export const KikobaLoansComponent: React.FC<Props> = (props: Props) => {
+  const [loading, setLoading] = useState(false);
   const [loan, setLoan] = useState<KikobaLoanData>();
   const [loans, setLoans] = useState<KikobaLoanData[]>([]);
   const [page, setPage] = useState<number>(1);
@@ -50,6 +51,7 @@ export const KikobaLoansComponent: React.FC<Props> = (props: Props) => {
   let {id} = useParams<{id: string}>();
 
   const getLoans = async () => {
+    setLoading(true);
     await simpleRestProvider.custom!({
       method: "get",
       url: configs.apiUrl + `/kikoba/${id}/loans`,
@@ -63,6 +65,8 @@ export const KikobaLoansComponent: React.FC<Props> = (props: Props) => {
       .catch(() => {
         return {data: null};
       });
+
+    setLoading(false);
   };
 
   const checkIfLoanApprover = async () => {
@@ -164,6 +168,7 @@ export const KikobaLoansComponent: React.FC<Props> = (props: Props) => {
             bordered
             itemLayout="horizontal"
             dataSource={loans}
+            loading={loading}
             renderItem={(item) => {
               var fullName = `${item.kikobaMember.member.firstName} ${item.kikobaMember.member.middleName} ${item.kikobaMember.member.lastName}`;
               return (

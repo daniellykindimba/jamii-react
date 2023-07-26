@@ -15,6 +15,7 @@ interface Props {
 }
 
 export const UserContributionsComponent: React.FC<Props> = (props: Props) => {
+  const [loading, setLoading] = useState(false);
   const [limit, setLimit] = useState(25);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
@@ -92,6 +93,7 @@ export const UserContributionsComponent: React.FC<Props> = (props: Props) => {
     key: string = "",
     limit: number = 25
   ) => {
+    setLoading(true);
     const {data} = await simpleRestProvider.custom!<
       KikobaContributionData | any
     >({
@@ -116,6 +118,7 @@ export const UserContributionsComponent: React.FC<Props> = (props: Props) => {
         }
       }
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -161,6 +164,7 @@ export const UserContributionsComponent: React.FC<Props> = (props: Props) => {
       )}
 
       <Table
+        loading={loading}
         dataSource={contributions}
         columns={columns}
         scroll={{

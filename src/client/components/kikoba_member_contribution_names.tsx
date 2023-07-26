@@ -35,6 +35,7 @@ interface Props {
 export const KikobaMemberContributionNamesComponent: React.FC<Props> = (
   props: Props
 ) => {
+  const [loading, setLoading] = useState(true);
   const [names, setNames] = useState<KikobaMemberData[]>([]);
   const [addName, setAddName] = useState(false);
   const [editContributionName, setEditContributionName] = useState("");
@@ -47,6 +48,7 @@ export const KikobaMemberContributionNamesComponent: React.FC<Props> = (
     key: string = "",
     limit: number = 10
   ) => {
+    setLoading(true);
     const {data} = await simpleRestProvider.custom!<KikobaMemberData | any>({
       url:
         configs.apiUrl + `/kikoba/member/${props.member.id}/contribution/names`,
@@ -65,6 +67,7 @@ export const KikobaMemberContributionNamesComponent: React.FC<Props> = (
         }
       }
     }
+    setLoading(false);
   };
 
   const deleteName = async (id: number) => {
@@ -138,6 +141,7 @@ export const KikobaMemberContributionNamesComponent: React.FC<Props> = (
         <Button
           onClick={() => setAddName(true)}
           icon={<PlusOutlined style={{color: configs.primaryColor}} />}
+          disabled={loading}
         >
           Add New Name
         </Button>
@@ -152,6 +156,7 @@ export const KikobaMemberContributionNamesComponent: React.FC<Props> = (
         <List
           bordered
           itemLayout="horizontal"
+          loading={loading}
           dataSource={names}
           renderItem={(name) => {
             var fullName = `${name.member.firstName} ${name.member.middleName} ${name.member.lastName}`;

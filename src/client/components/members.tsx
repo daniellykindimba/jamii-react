@@ -172,6 +172,7 @@ export const KikobaMembersComponent: React.FC<Props> = (props: Props) => {
             bordered
             itemLayout="horizontal"
             dataSource={members}
+            loading={loading}
             renderItem={(item, index) => (
               <List.Item
                 actions={[

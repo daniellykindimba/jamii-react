@@ -37,9 +37,11 @@ interface Props {
 export const ClientPaymentsAddingComponent: React.FC<Props> = (
   props: Props
 ) => {
+  const [loadidng, setLoading] = useState(false);
   const [kikobas, setKikobas] = useState<KikobaData[]>([]);
 
   const getKikobas = async () => {
+    setLoading(true);
     const {data} = await simpleRestProvider.custom!({
       url: configs.apiUrl + `/kikobas/me`,
       method: "get",
@@ -53,6 +55,7 @@ export const ClientPaymentsAddingComponent: React.FC<Props> = (
     if (data) {
       setKikobas(data.data);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -70,6 +73,7 @@ export const ClientPaymentsAddingComponent: React.FC<Props> = (
         <List
           bordered
           dataSource={kikobas}
+          loading={loadidng}
           renderItem={(kikoba: KikobaData) => (
             <List.Item actions={[]}>
               {kikoba.name}
@@ -112,6 +116,7 @@ interface ClientKikobaNamesProps {
 export const ClientKikobaNamesComponent: React.FC<ClientKikobaNamesProps> = (
   props: ClientKikobaNamesProps
 ) => {
+  const [loadidng, setLoading] = useState(false);
   const [members, setMembers] = useState<KikobaMemberData[]>([]);
   const [member, setMember] = useState<KikobaMemberData | any>(null);
   const [contributionModal, setContributionModal] = useState(false);
@@ -123,6 +128,7 @@ export const ClientKikobaNamesComponent: React.FC<ClientKikobaNamesProps> = (
   };
 
   const getMembership = async () => {
+    setLoading(true);
     const {data} = await simpleRestProvider.custom!({
       url: configs.apiUrl + `/kikoba/` + props.kikoba.id + `/membership`,
       method: "get",
@@ -136,6 +142,7 @@ export const ClientKikobaNamesComponent: React.FC<ClientKikobaNamesProps> = (
     if (data) {
       setMembers(data.data);
     }
+    setLoading(false);
   };
 
   const getTitle = () => {
@@ -166,6 +173,7 @@ export const ClientKikobaNamesComponent: React.FC<ClientKikobaNamesProps> = (
         <List
           bordered
           dataSource={members}
+          loading={loadidng}
           renderItem={(member: KikobaMemberData) => (
             <List.Item
               actions={[

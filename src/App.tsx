@@ -54,6 +54,7 @@ import {KikobaNamesPage} from "./client/pages/kikoba/names";
 import {KikobaDistributionsPage} from "./client/pages/kikoba/distributions";
 import {KikobaPayoutApproversPage} from "./client/pages/kikoba/payout_approvers";
 import MenuDivider from "antd/es/menu/MenuDivider";
+import {DonationsPage} from "./client/pages/donations";
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
 
@@ -354,7 +355,7 @@ function App() {
                   <Route index element={<ClientLoans />} />
                 </Route>
                 <Route path="/donations">
-                  <Route index element={<ClientLoans />} />
+                  <Route index element={<DonationsPage />} />
                 </Route>
                 <Route path="/learningcenter">
                   <Route index element={<ClientLoans />} />

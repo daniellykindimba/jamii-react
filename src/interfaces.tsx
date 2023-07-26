@@ -202,3 +202,37 @@ export interface BillingData {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface DonationData {
+  id: number;
+  title: string;
+  description: string;
+  amount: number;
+  user: UserData;
+  kikoba: KikobaData;
+  deadline: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DonationMemberData {
+  id: number;
+  user: UserData;
+  donation: DonationData;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DonationPaymentData {
+  id: number;
+  user: UserData;
+  donation: DonationData;
+  amount: number;
+  reference: string;
+  phone: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}

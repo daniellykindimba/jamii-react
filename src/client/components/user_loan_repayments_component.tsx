@@ -15,6 +15,7 @@ interface Props {
 }
 
 export const UserLoanRepaymentsComponent: React.FC<Props> = (props: Props) => {
+  const [loading, setLoading] = useState(false);
   const [key, setKey] = useState("");
   const [limit, setLimit] = useState(25);
   const [page, setPage] = useState(1);
@@ -93,6 +94,7 @@ export const UserLoanRepaymentsComponent: React.FC<Props> = (props: Props) => {
     key: string = "",
     limit: number = 25
   ) => {
+    setLoading(true);
     const {data} = await simpleRestProvider.custom!<
       KikobaLoanRepaymentData | any
     >({
@@ -117,6 +119,7 @@ export const UserLoanRepaymentsComponent: React.FC<Props> = (props: Props) => {
         }
       }
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -162,6 +165,7 @@ export const UserLoanRepaymentsComponent: React.FC<Props> = (props: Props) => {
         </Row>
       )}
       <Table
+        loading={loading}
         dataSource={repayments}
         columns={columns}
         scroll={{

@@ -16,6 +16,7 @@ interface AnalyticsData {
 interface Props {}
 
 export const ControlHome: React.FC<Props> = (props: Props) => {
+  const [loading, setLoading] = useState<boolean>(false);
   const [analytics, setAnalytics] = useState<AnalyticsData>({
     totalUsers: 0,
     totalVikoba: 0,
@@ -32,6 +33,7 @@ export const ControlHome: React.FC<Props> = (props: Props) => {
     typeof breakpoint.lg === "undefined" ? false : !breakpoint.lg;
 
   const getAnalytics = async () => {
+    setLoading(true);
     const {data} = await simpleRestProvider.custom!<RegionData | any>({
       url: configs.apiUrl + `/dashboard/analytics`,
       method: "get",
@@ -45,6 +47,7 @@ export const ControlHome: React.FC<Props> = (props: Props) => {
     if (data) {
       setAnalytics(data.data);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -61,6 +64,7 @@ export const ControlHome: React.FC<Props> = (props: Props) => {
           <Card bordered={false}>
             <Statistic
               title="Total Users"
+              loading={loading}
               value={analytics.totalUsers}
               precision={0}
               valueStyle={{color: "#3f8600"}}
@@ -71,6 +75,7 @@ export const ControlHome: React.FC<Props> = (props: Props) => {
           <Card bordered={false}>
             <Statistic
               title="Total Vikoba"
+              loading={loading}
               value={analytics.totalVikoba}
               precision={0}
               valueStyle={{color: "#3f8600"}}
@@ -82,6 +87,7 @@ export const ControlHome: React.FC<Props> = (props: Props) => {
           <Card bordered={false}>
             <Statistic
               title="Total Vikoba Members"
+              loading={loading}
               value={analytics.totalVikobaMembers}
               precision={0}
               valueStyle={{color: "#3f8600"}}

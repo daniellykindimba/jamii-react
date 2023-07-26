@@ -39,6 +39,7 @@ interface Props {
 export const KikobaSharesTransactionsComponent: React.FC<Props> = (
   props: Props
 ) => {
+  const [loading, setLoading] = useState(false);
   const [shares, setShares] = useState<KikobaContributionData[]>([]);
   const [addingSharesModalVisible, setAddingSharesModalVisible] =
     useState(false);
@@ -53,6 +54,7 @@ export const KikobaSharesTransactionsComponent: React.FC<Props> = (
     key: string = "",
     limit: number = 10
   ) => {
+    setLoading(true);
     const {data} = await simpleRestProvider.custom!<
       KikobaContributionData | any
     >({
@@ -74,6 +76,7 @@ export const KikobaSharesTransactionsComponent: React.FC<Props> = (
         }
       }
     }
+    setLoading(false);
   };
 
   const deleteShare = async (id: number) => {
@@ -158,6 +161,7 @@ export const KikobaSharesTransactionsComponent: React.FC<Props> = (
             bordered
             itemLayout="horizontal"
             dataSource={shares}
+            loading={loading}
             renderItem={(item) => {
               var fullName = `${item.kikobaMember.member.firstName} ${item.kikobaMember.member.middleName} ${item.kikobaMember.member.lastName}`;
               return (
