@@ -1,6 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react-hooks/exhaustive-deps */
-import {SearchOutlined, DeleteOutlined, EditOutlined} from "@ant-design/icons";
+import {
+  SearchOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  OrderedListOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import {
   useActiveAuthProvider,
   useGetIdentity,
@@ -24,6 +30,7 @@ import simpleRestProvider from "../../../api";
 import configs from "../../../configs";
 import {DonationData, RegionData} from "../../../interfaces";
 import {CreateDonationForm} from "../../components/form/create_donation_form";
+import moment from "moment";
 
 interface RegionsSearchFormData {
   key: string;
@@ -62,6 +69,12 @@ export const DonationsPage: React.FC<Props> = (props: Props) => {
 
   const [editModal, setEditModal] = useState(false);
   const [createModal, setCreateModal] = useState(false);
+  const [manageModal, setManageModal] = useState(false);
+
+  const handleManageDonation = (donation: DonationData) => {
+    setDonation(donation);
+    setManageModal(true);
+  };
 
   const showEditDonationModal = (donation: DonationData) => {
     setDonation(donation);
@@ -84,26 +97,23 @@ export const DonationsPage: React.FC<Props> = (props: Props) => {
   };
 
   const confirmDelete = async (id: number) => {
-    const {data} = await simpleRestProvider.custom!({
-      url: configs.apiUrl + "/donation/delete/" + id,
+    await simpleRestProvider.custom!({
+      url: configs.apiUrl + "/donation/" + id + "/delete",
       method: "get",
     })
       .then((res) => {
+        console.log(res);
         if (res.data.success) {
-          return res.data;
+          if (res.data.success) {
+            setDonations(donations.filter((donation) => donation.id !== id));
+          }
         } else {
           message.error(res.data.message);
-          return {data: {success: false}};
         }
       })
       .catch((err) => {
         message.error(err.message);
-        return {data: {success: false}};
       });
-
-    if (data.success) {
-      setDonations(donations.filter((donation) => donation.id !== id));
-    }
   };
 
   const blockDonation = async (id: number) => {
@@ -172,9 +182,46 @@ export const DonationsPage: React.FC<Props> = (props: Props) => {
 
   const columns = [
     {
+      title: "Donation#",
+      dataIndex: "id",
+      render: (text: any, row: any, index: any) => (
+        <a onClick={() => handleManageDonation(row)}>
+          <span>{row.donationNumber}</span>
+        </a>
+      ),
+    },
+    {
       title: "Title",
       dataIndex: "title",
       render: (text: any, row: any, index: any) => <span>{row.title}</span>,
+    },
+    {
+      title: "Deadline",
+      dataIndex: "deadline",
+      render: (text: any, row: any, index: any) => (
+        <span>{moment(row.deadline).format("MMMM Do YYYY, h:mm:ss a")}</span>
+      ),
+    },
+    {
+      title: "Goal Amount",
+      dataIndex: "goalAmount",
+      render: (text: any, row: any, index: any) => (
+        <span>{row.totalAmount}</span>
+      ),
+    },
+    {
+      title: "Donated Amount",
+      dataIndex: "donatedAmount",
+      render: (text: any, row: any, index: any) => (
+        <span>{row.totalDonations}</span>
+      ),
+    },
+    {
+      title: "Total Donars",
+      dataIndex: "totalDonators",
+      render: (text: any, row: any, index: any) => (
+        <span>{row.totalDonators}</span>
+      ),
     },
     {
       title: "Status",
@@ -267,6 +314,11 @@ export const DonationsPage: React.FC<Props> = (props: Props) => {
     setEditDonationModal(true);
   };
 
+  const onCreateFinish = async (donation: DonationData) => {
+    setDonations([donation, ...donations]);
+    setCreateModal(false);
+  };
+
   const onFinishEdit = async () => {
     setEditDonationModal(false);
     getDonations(page, searchKey, limit);
@@ -306,11 +358,20 @@ export const DonationsPage: React.FC<Props> = (props: Props) => {
           style={{display: "flex", justifyContent: "flex-end"}}
         >
           <Button
+            icon={<PlusOutlined />}
             type="primary"
             size="large"
             onClick={() => setCreateModal(true)}
           >
             Create Donation
+          </Button>
+          <Button
+            icon={<OrderedListOutlined />}
+            type="primary"
+            size="large"
+            onClick={() => {}}
+          >
+            View Public Donations
           </Button>
         </Col>
       </Row>
@@ -359,8 +420,25 @@ export const DonationsPage: React.FC<Props> = (props: Props) => {
           padding: 10,
         }}
       >
-        <CreateDonationForm onFinish={() => {}} />
+        <CreateDonationForm onFinish={onCreateFinish} />
       </Modal>
+
+      <Modal
+        title={"Manage " + donation?.title + " #" + donation?.donationNumber}
+        width={"90vw"}
+        destroyOnClose={true}
+        open={manageModal}
+        onOk={() => setManageModal(false)}
+        onCancel={() => setManageModal(false)}
+        footer={[]}
+        bodyStyle={{
+          maxHeight: "90vh",
+          overflowY: "scroll",
+          padding: 10,
+        }}
+        // make modal full height of the screen
+        style={{top: 5, bottom: 0}}
+      ></Modal>
     </>
   );
 };

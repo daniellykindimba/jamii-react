@@ -1,23 +1,36 @@
-import {Button, DatePicker, Form, Input, InputNumber, message} from "antd";
+import {
+  Button,
+  Checkbox,
+  DatePicker,
+  Form,
+  Input,
+  InputNumber,
+  Tag,
+  message,
+} from "antd";
 import moment from "moment";
 import {useState, useEffect} from "react";
 import simpleRestProvider from "../../../api";
 import configs from "../../../configs";
-import {RegionData, DistrictData} from "../../../interfaces";
-
-const {TextArea} = Input;
+import {CKEditor} from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import {CKEditorComponent} from "../ckeditor_component";
 
 interface formData {
   title: string;
   description: string;
   amount: number;
-  deadline: Date;
+  deadline: string;
+  is_public: boolean;
+  online_collection: boolean;
 }
 
 interface Props {
   onFinish: any;
 }
 export const CreateDonationForm: React.FC<Props> = (props: Props) => {
+  const [isPublic, setIsPublic] = useState(true);
+  const [onlineDonation, setOnlineDonation] = useState(false);
   const [form] = Form.useForm<formData>();
 
   const createDonation = async (values: formData) => {
@@ -27,6 +40,8 @@ export const CreateDonationForm: React.FC<Props> = (props: Props) => {
     formData.append("deadline", moment(values.deadline).format("YYYY-MM-DD"));
     formData.append("description", values.description);
     formData.append("amount", values.amount.toString());
+    formData.append("is_public", values.is_public.toString());
+    formData.append("online_collection", values.online_collection.toString());
     const data = await simpleRestProvider.custom!({
       method: "post",
       url: configs.apiUrl + "/donation/create",
@@ -49,6 +64,10 @@ export const CreateDonationForm: React.FC<Props> = (props: Props) => {
     }
   };
 
+  const handleOnEditorChange = (data: any) => {
+    console.log(data);
+  };
+
   useEffect(() => {}, []);
 
   return (
@@ -57,6 +76,14 @@ export const CreateDonationForm: React.FC<Props> = (props: Props) => {
         form={form}
         layout="vertical"
         onFinish={(values) => {
+          values.is_public = isPublic;
+          values.amount = values.amount ? values.amount : 0.0;
+          // set deadline to 1 year from now if not set
+          values.deadline = values.deadline
+            ? values.deadline
+            : moment().add(1, "years").format("YYYY-MM-DD");
+          values.online_collection = onlineDonation;
+          console.log(values);
           createDonation(values);
         }}
         onFinishFailed={() => {
@@ -64,6 +91,34 @@ export const CreateDonationForm: React.FC<Props> = (props: Props) => {
         }}
         autoComplete="off"
       >
+        <Form.Item
+          label="Public Availability"
+          name="is_public"
+          rules={[{required: false, message: "Please input Title!"}]}
+        >
+          <Checkbox
+            checked={isPublic}
+            onChange={(e) => {
+              setIsPublic(e.target.checked);
+            }}
+          >
+            Public
+          </Checkbox>
+        </Form.Item>
+        <Form.Item
+          label="Allow Online Donations"
+          name="online_collection"
+          rules={[{required: false}]}
+        >
+          <Checkbox
+            checked={onlineDonation}
+            onChange={(e) => {
+              setOnlineDonation(e.target.checked);
+            }}
+          >
+            Online Donations
+          </Checkbox>
+        </Form.Item>
         <Form.Item
           label="Title"
           name="title"
@@ -77,15 +132,22 @@ export const CreateDonationForm: React.FC<Props> = (props: Props) => {
           name="description"
           rules={[{required: true, message: "Please input Description!"}]}
         >
-          <TextArea rows={4} placeholder="Enter Description ..." />
+          <CKEditorComponent onChange={handleOnEditorChange} />
         </Form.Item>
 
         <Form.Item
-          label="Goal Amount"
+          label={
+            <>
+              Goal Amount (Optional)
+              <Tag color="green" style={{marginLeft: 10}}>
+                if Left to be 0, Donations will be limitless
+              </Tag>
+            </>
+          }
           name="amount"
           rules={[
             {
-              required: true,
+              required: false,
               type: "number",
               message: "Enter Goal Amount!",
             },
@@ -101,11 +163,18 @@ export const CreateDonationForm: React.FC<Props> = (props: Props) => {
         </Form.Item>
 
         <Form.Item
-          label="Deadline"
+          label={
+            <>
+              Deadline (Optional)
+              <Tag color="green" style={{marginLeft: 10}}>
+                if Left Empty, Deadline will be set to 1 year from now
+              </Tag>
+            </>
+          }
           name="deadline"
           rules={[
             {
-              required: true,
+              required: false,
               type: "date",
               message: "Choose Deadline!",
             },
@@ -118,7 +187,11 @@ export const CreateDonationForm: React.FC<Props> = (props: Props) => {
           <Button
             type="primary"
             style={{float: "left"}}
-            onClick={() => form.resetFields()}
+            onClick={() => {
+              setIsPublic(true);
+              setOnlineDonation(false);
+              form.resetFields();
+            }}
           >
             Clear
           </Button>

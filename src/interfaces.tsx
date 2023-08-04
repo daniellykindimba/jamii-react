@@ -138,8 +138,6 @@ export interface KikobaLoanApproverData {
   updatedAt: string;
 }
 
-
-
 export interface KikobaPayoutApproverData {
   id: number;
   kikoba: KikobaData;
@@ -205,9 +203,12 @@ export interface BillingData {
 
 export interface DonationData {
   id: number;
+  donationNumber: string;
   title: string;
   description: string;
-  amount: number;
+  totalAmount: number;
+  totalDonations: number;
+  totalDonators: number;
   user: UserData;
   kikoba: KikobaData;
   deadline: string;
