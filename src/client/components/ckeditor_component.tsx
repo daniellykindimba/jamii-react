@@ -3,6 +3,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 interface Props {
   onChange: any;
+  data?: any;
 }
 export const CKEditorComponent: React.FC<Props> = (props: Props) => {
   return (
@@ -24,6 +25,7 @@ export const CKEditorComponent: React.FC<Props> = (props: Props) => {
             "redo",
           ],
         }}
+        data={props.data}
         onReady={(editor: any) => {
           editor.editing.view.change(
             (writer: {

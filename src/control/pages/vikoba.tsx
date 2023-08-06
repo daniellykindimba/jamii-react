@@ -53,6 +53,16 @@ export const ControlVikoba: React.FC<Props> = (props: Props) => {
       ),
     },
     {
+      title: "Members",
+      dataIndex: "totalMembers",
+      key: "totalMembers",
+      render: (text: any, row: any, index: any) => (
+        <>
+          <span>{row.totalMembers}</span>
+        </>
+      ),
+    },
+    {
       title: "Region/District",
       dataIndex: "region",
       key: "region",

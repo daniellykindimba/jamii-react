@@ -6,6 +6,8 @@ import {
   EditOutlined,
   OrderedListOutlined,
   PlusOutlined,
+  ArrowDownOutlined,
+  ArrowUpOutlined,
 } from "@ant-design/icons";
 import {
   useActiveAuthProvider,
@@ -14,6 +16,7 @@ import {
 } from "@refinedev/core";
 import {
   Button,
+  Card,
   Col,
   Form,
   Grid,
@@ -21,6 +24,7 @@ import {
   Modal,
   Popconfirm,
   Row,
+  Statistic,
   Table,
   message,
 } from "antd";
@@ -32,7 +36,9 @@ import {DonationData, RegionData} from "../../../interfaces";
 import {CreateDonationForm} from "../../components/form/create_donation_form";
 import moment from "moment";
 import {EditDonationForm} from "../../components/form/edit_donation_form";
-import {DonationDashboard} from "./doantion_dashboard";
+import {DonationMembersComponent} from "./components/donation_members";
+import {DonationsComponent} from "./components/donations";
+import {DonationDisbursementsComponent} from "./components/disbursements";
 
 interface RegionsSearchFormData {
   key: string;
@@ -44,13 +50,21 @@ interface RegionFormData {
 
 interface Props {
   onUpdate?: any;
+  donation?: DonationData;
 }
 
-export const DonationsPage: React.FC<Props> = (props: Props) => {
+export const DonationDashboard: React.FC<Props> = (props: Props) => {
   const authProvider = useActiveAuthProvider();
   const {data: user} = useGetIdentity({
     v3LegacyAuthProviderCompatible: Boolean(authProvider?.isLegacy),
   });
+
+  const [totalDonators, setTotalDonators] = useState(
+    props.donation?.totalDonators
+  );
+  const [totalDonations, setTotalDonations] = useState(
+    props.donation?.totalDonations
+  );
 
   const [donation, setDonation] = useState<DonationData>();
   const [donations, setDonations] = useState<DonationData[]>([]);
@@ -193,46 +207,6 @@ export const DonationsPage: React.FC<Props> = (props: Props) => {
       ),
     },
     {
-      title: "Title",
-      dataIndex: "title",
-      render: (text: any, row: any, index: any) => <span>{row.title}</span>,
-    },
-    {
-      title: "Deadline",
-      dataIndex: "deadline",
-      render: (text: any, row: any, index: any) => (
-        <span>{moment(row.deadline).format("MMMM Do YYYY, h:mm:ss a")}</span>
-      ),
-    },
-    {
-      title: "Goal Amount",
-      dataIndex: "goalAmount",
-      render: (text: any, row: any, index: any) => (
-        <span>{row.totalAmount}</span>
-      ),
-    },
-    {
-      title: "Donated Amount",
-      dataIndex: "donatedAmount",
-      render: (text: any, row: any, index: any) => (
-        <span>{row.totalDonations}</span>
-      ),
-    },
-    {
-      title: "Total Donars",
-      dataIndex: "totalDonators",
-      render: (text: any, row: any, index: any) => (
-        <span>{row.totalDonators}</span>
-      ),
-    },
-    {
-      title: "Public",
-      dataIndex: "public",
-      render: (text: any, row: any, index: any) => (
-        <span>{row.isPublic ? "Yes" : "No"}</span>
-      ),
-    },
-    {
       title: "Status",
       dataIndex: "isActive",
       render: (text: any, row: any, index: any) => (
@@ -346,71 +320,45 @@ export const DonationsPage: React.FC<Props> = (props: Props) => {
 
   return (
     <>
-      <Row style={{marginTop: 10}}>
-        <Col span={isMobile ? 24 : 8}>
-          <Form<RegionsSearchFormData>
-            layout="vertical"
-            form={searchForm}
-            onFinish={(values) => {
-              setPage(1);
-              donations.length = 0;
-              getDonations(1, values.key, limit);
-            }}
-          >
-            <Form.Item name="key">
-              <Input
-                size="large"
-                placeholder="Search ..."
-                prefix={<SearchOutlined />}
-                autoComplete="off"
-                allowClear
+      <Card>
+        <Row gutter={16}>
+          <Col span={12}>
+            <Card bordered={false}>
+              <Statistic
+                title="Donors"
+                value={totalDonators}
+                precision={0}
+                valueStyle={{color: "#3f8600"}}
+                prefix={<ArrowUpOutlined />}
               />
-            </Form.Item>
-          </Form>
+            </Card>
+          </Col>
+          <Col span={12}>
+            <Card bordered={false}>
+              <Statistic
+                title="Total Donations"
+                value={totalDonations}
+                precision={2}
+                valueStyle={{color: "#055E2B"}}
+                prefix={<ArrowUpOutlined />}
+              />
+            </Card>
+          </Col>
+        </Row>
+      </Card>
+      <Row>
+        <Col span={8}>
+          <DonationMembersComponent />
         </Col>
 
-        <Col
-          span={isMobile ? 24 : 16}
-          style={{display: "flex", justifyContent: "flex-end"}}
-        >
-          <Button
-            icon={<PlusOutlined />}
-            type="primary"
-            size="large"
-            onClick={() => setCreateModal(true)}
-          >
-            Create Donation
-          </Button>
-          <Button
-            icon={<OrderedListOutlined />}
-            type="primary"
-            size="large"
-            onClick={() => {}}
-          >
-            View Public Donations
-          </Button>
+        <Col span={8}>
+          <DonationsComponent />
+        </Col>
+
+        <Col span={8}>
+          <DonationDisbursementsComponent />
         </Col>
       </Row>
-
-      <div>
-        <Table
-          size="small"
-          loading={loading}
-          columns={columns}
-          dataSource={donations}
-          scroll={{x: true}}
-          pagination={{
-            onChange: (page, pageSize) => {
-              setLimit(pageSize);
-              getDonations(page, searchKey, pageSize);
-            },
-            total: total,
-            pageSize: limit,
-            position: ["bottomCenter"],
-            showQuickJumper: true,
-          }}
-        />
-      </div>
 
       <Modal
         title={"Updating " + donation?.title}
@@ -456,9 +404,7 @@ export const DonationsPage: React.FC<Props> = (props: Props) => {
         }}
         // make modal full height of the screen
         style={{top: 5, bottom: 0}}
-      >
-        <DonationDashboard donation={donation} onUpdate={() => {}} />
-      </Modal>
+      ></Modal>
     </>
   );
 };

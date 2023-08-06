@@ -48,6 +48,7 @@ export interface KikobaData {
   paymentMode: string;
   planType: string;
   allowClientLoanApplication: boolean;
+  totalMembers: number;
   region: RegionData;
   district: DistrictData;
   isActive: boolean;
@@ -212,6 +213,8 @@ export interface DonationData {
   user: UserData;
   kikoba: KikobaData;
   deadline: string;
+  isPublic: boolean;
+  onlineCollection: boolean;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;

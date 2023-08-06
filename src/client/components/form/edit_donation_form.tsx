@@ -13,6 +13,8 @@ import {useState, useEffect} from "react";
 import simpleRestProvider from "../../../api";
 import configs from "../../../configs";
 import {CKEditorComponent} from "../ckeditor_component";
+import {DonationData} from "../../../interfaces";
+import dayjs from "dayjs";
 
 interface formData {
   title: string;
@@ -25,10 +27,13 @@ interface formData {
 
 interface Props {
   onFinish: any;
+  donation: DonationData | any;
 }
-export const CreateDonationForm: React.FC<Props> = (props: Props) => {
-  const [isPublic, setIsPublic] = useState(true);
-  const [onlineDonation, setOnlineDonation] = useState(false);
+export const EditDonationForm: React.FC<Props> = (props: Props) => {
+  const [isPublic, setIsPublic] = useState(props.donation.isPublic);
+  const [onlineDonation, setOnlineDonation] = useState(
+    props.donation.onlineCollection
+  );
   const [form] = Form.useForm<formData>();
 
   const createDonation = async (values: formData) => {
@@ -42,18 +47,18 @@ export const CreateDonationForm: React.FC<Props> = (props: Props) => {
     formData.append("onlineCollection", values.online_collection);
     const data = await simpleRestProvider.custom!({
       method: "post",
-      url: configs.apiUrl + "/donation/create",
+      url: configs.apiUrl + "/donation/" + props.donation.id + "/update",
       payload: formData,
     })
       .then((res) => {
         return res;
       })
       .catch((error) => {
-        console.log(error);
-        message.error("Error in creating donation");
+        message.error("Error in updating donation");
         return {data: null};
       });
     if (data.data) {
+        console.log(data.data);
       if (data.data.success) {
         props.onFinish(data.data.donation);
         message.success(data.data.message);
@@ -89,6 +94,12 @@ export const CreateDonationForm: React.FC<Props> = (props: Props) => {
           message.error("Please fill all required fields");
         }}
         autoComplete="off"
+        initialValues={{
+          title: props.donation.title,
+          description: props.donation.description,
+          amount: props.donation.amount,
+          deadline: dayjs(props.donation.deadline),
+        }}
       >
         <Form.Item
           label="Public Availability"
@@ -131,7 +142,10 @@ export const CreateDonationForm: React.FC<Props> = (props: Props) => {
           name="description"
           rules={[{required: true, message: "Please input Description!"}]}
         >
-          <CKEditorComponent onChange={handleOnEditorChange} />
+          <CKEditorComponent
+            data={props.donation.description}
+            onChange={handleOnEditorChange}
+          />
         </Form.Item>
 
         <Form.Item
