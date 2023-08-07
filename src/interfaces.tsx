@@ -3,6 +3,7 @@ export interface UserData {
   firstName: string;
   middleName: string;
   lastName: string;
+  fullName: string;
   phone: string;
   email: string;
   isActive: boolean;
@@ -210,6 +211,7 @@ export interface DonationData {
   totalAmount: number;
   totalDonations: number;
   totalDonators: number;
+  totalDisbursements: number;
   user: UserData;
   kikoba: KikobaData;
   deadline: string;
@@ -224,6 +226,7 @@ export interface DonationMemberData {
   id: number;
   user: UserData;
   donation: DonationData;
+  totalDonations: number;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
@@ -236,6 +239,18 @@ export interface DonationPaymentData {
   amount: number;
   reference: string;
   phone: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DonationDisbursementData {
+  id: number;
+  user: UserData;
+  donation: DonationData;
+  amount: number;
+  phone: string;
+  reference: string;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;

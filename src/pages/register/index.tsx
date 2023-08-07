@@ -309,7 +309,6 @@ export const Register: React.FC = () => {
                                       message.error("Error Occured");
                                       return null;
                                     });
-                                  console.log(data);
                                   if (data) {
                                     if (data.data.success) {
                                       return Promise.resolve();

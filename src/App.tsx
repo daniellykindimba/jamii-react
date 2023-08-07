@@ -55,6 +55,7 @@ import {KikobaDistributionsPage} from "./client/pages/kikoba/distributions";
 import {KikobaPayoutApproversPage} from "./client/pages/kikoba/payout_approvers";
 import MenuDivider from "antd/es/menu/MenuDivider";
 import {DonationsPage} from "./client/pages/donations";
+import {ControlMalipConfigs} from "./control/pages/malipo_configs";
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
 
@@ -644,6 +645,19 @@ function App() {
                                 />
                               }
                             >
+                              <Link to={"/control/malipo/configs"}>
+                                Payment API
+                              </Link>
+                            </Menu.Item>
+                            <Menu.Item
+                              icon={
+                                <OrderedListOutlined
+                                  style={{
+                                    color: configs.primaryColor,
+                                  }}
+                                />
+                              }
+                            >
                               <Link to={"/control/roles"}>Roles</Link>
                             </Menu.Item>
                             <Divider />
@@ -680,6 +694,10 @@ function App() {
                   <Route path="regions" element={<ControlRegions />} />
                   <Route path="districts" element={<ControlDistrict />} />
                   <Route path="roles" element={<ControlRole />} />
+                  <Route
+                    path="malipo/configs"
+                    element={<ControlMalipConfigs />}
+                  />
                 </Route>
 
                 <Route path="/control/*" element={<ErrorComponent />} />
