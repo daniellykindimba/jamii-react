@@ -28,6 +28,7 @@ import {KikobaData, KikobaContributionData} from "../../interfaces";
 import {KikobaContributionsDraftComponent} from "./kikoba_contributions_draft";
 import {KikobaMembersToAddSharesComponent} from "./kikoba_members_to_add_contributions";
 import {KikobaAllSharesTransactionsComponent} from "./kikoba_shares_transactions";
+import {CurrencyFormatter} from "../../components/currency/currency_formatter";
 
 const {Text} = Typography;
 
@@ -162,7 +163,7 @@ export const KikobaSharesTransactionsComponent: React.FC<Props> = (
             itemLayout="horizontal"
             dataSource={shares}
             loading={loading}
-            renderItem={(item) => {
+            renderItem={(item: KikobaContributionData) => {
               var fullName = `${item.kikobaMember.member.firstName} ${item.kikobaMember.member.middleName} ${item.kikobaMember.member.lastName}`;
               return (
                 <List.Item
@@ -233,17 +234,10 @@ export const KikobaSharesTransactionsComponent: React.FC<Props> = (
                               style={{marginLeft: 5, fontSize: 12}}
                               color="green"
                             >
-                              {new Intl.NumberFormat("en-US", {
-                                style: "currency",
-                                currency: "TZS",
-                              })
-                                .formatToParts(item.amount)
-                                .map((p) =>
-                                  p.type !== "literal" && p.type !== "currency"
-                                    ? p.value
-                                    : ""
-                                )
-                                .join("")}
+                              <CurrencyFormatter
+                                amount={item.amount}
+                                currency="TZS"
+                              />
                             </Tag>
                           </a>
                         </span>

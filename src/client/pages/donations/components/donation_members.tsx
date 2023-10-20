@@ -20,6 +20,7 @@ import {
   List,
   Modal,
   Popconfirm,
+  Spin,
   Table,
   Tag,
   Tooltip,
@@ -149,75 +150,80 @@ export const DonationMembersComponent: React.FC<Props> = (props: Props) => {
           <Button
             icon={<PlusOutlined />}
             onClick={() => setAddDonationMemberModal(true)}
+            disabled={props.donation?.user.id !== user?.id}
           >
             Add Member
           </Button>,
         ]}
       >
-        <InfiniteScroll
-          dataLength={total}
-          next={() => getMembers(page + 1, searchKey, limit)}
-          hasMore={total > members.length}
-          loader={<h4>Loading...</h4>}
-          endMessage={
-            <p style={{textAlign: "center"}}>
-              <b>Yay! You have seen it all</b>
-            </p>
-          }
-          // below props only if you need pull down functionality
-          refreshFunction={() => getMembers(1, searchKey, limit)}
-          pullDownToRefresh
-          pullDownToRefreshThreshold={50}
-        >
-          <List
-            dataSource={members}
-            renderItem={(member) => (
-              <List.Item
-                key={member.user.phone}
-                extra={[
-                  <Tooltip title="Add Donation">
-                    <Button
-                      type="primary"
-                      icon={<PlusOutlined />}
-                      style={{marginRight: 3}}
-                      onClick={() => handleAddDonationModal(member)}
-                    ></Button>
-                  </Tooltip>,
-                  <Popconfirm
-                    title={"Are you sure to delete this Member?"}
-                    onConfirm={() => confirmDelete(member?.id)}
-                    onCancel={() => {}}
-                    okText="Yes"
-                    cancelText="No"
-                  >
-                    <Button
-                      type="primary"
-                      icon={<DeleteOutlined />}
-                      style={{marginRight: 3}}
-                    ></Button>
-                  </Popconfirm>,
-                ]}
-              >
-                <List.Item.Meta
-                  avatar={<Avatar icon={<UserOutlined />} />}
-                  title={
-                    <a>
-                      {member.user.fullName}
+        <Spin spinning={loading}>
+          <InfiniteScroll
+            dataLength={total}
+            next={() => getMembers(page + 1, searchKey, limit)}
+            hasMore={total > members.length}
+            loader={<h4>Loading...</h4>}
+            endMessage={
+              <p style={{textAlign: "center"}}>
+                <b>Yay! You have seen it all</b>
+              </p>
+            }
+            // below props only if you need pull down functionality
+            refreshFunction={() => getMembers(1, searchKey, limit)}
+            pullDownToRefresh
+            pullDownToRefreshThreshold={50}
+          >
+            <List
+              dataSource={members}
+              renderItem={(member) => (
+                <List.Item
+                  key={member.user.phone}
+                  extra={[
+                    <Tooltip title="Add Donation">
+                      <Button
+                        disabled={props.donation?.user.id !== user?.id}
+                        type="primary"
+                        icon={<PlusOutlined />}
+                        style={{marginRight: 3}}
+                        onClick={() => handleAddDonationModal(member)}
+                      ></Button>
+                    </Tooltip>,
+                    <Popconfirm
+                      title={"Are you sure to delete this Member?"}
+                      onConfirm={() => confirmDelete(member?.id)}
+                      onCancel={() => {}}
+                      okText="Yes"
+                      cancelText="No"
+                    >
+                      <Button
+                        disabled={props.donation?.user.id !== user?.id}
+                        type="primary"
+                        icon={<DeleteOutlined />}
+                        style={{marginRight: 3}}
+                      ></Button>
+                    </Popconfirm>,
+                  ]}
+                >
+                  <List.Item.Meta
+                    avatar={<Avatar icon={<UserOutlined />} />}
+                    title={
+                      <a>
+                        {member.user.fullName}
 
-                      <Tag color="green" style={{marginLeft: 5}}>
-                        {member.totalDonations.toLocaleString("en-US", {
-                          style: "currency",
-                          currency: "TZS",
-                        })}
-                      </Tag>
-                    </a>
-                  }
-                  description={member.user.phone}
-                />
-              </List.Item>
-            )}
-          />
-        </InfiniteScroll>
+                        <Tag color="green" style={{marginLeft: 5}}>
+                          {member.totalDonations.toLocaleString("en-US", {
+                            style: "currency",
+                            currency: "TZS",
+                          })}
+                        </Tag>
+                      </a>
+                    }
+                    description={member.user.phone}
+                  />
+                </List.Item>
+              )}
+            />
+          </InfiniteScroll>
+        </Spin>
       </Card>
 
       <Modal

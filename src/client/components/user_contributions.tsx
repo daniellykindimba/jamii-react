@@ -6,6 +6,7 @@ import {useParams} from "react-router-dom";
 import simpleRestProvider from "../../api";
 import configs from "../../configs";
 import {KikobaContributionData} from "../../interfaces";
+import {CurrencyFormatter} from "../../components/currency/currency_formatter";
 const {Text} = Typography;
 
 interface Props {
@@ -71,9 +72,7 @@ export const UserContributionsComponent: React.FC<Props> = (props: Props) => {
       render: (text: any, record: any) => {
         return (
           <div style={{float: "right"}}>
-            <Text strong>
-              {record.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-            </Text>
+            <CurrencyFormatter currency="TZS" amount={record.amount} />
           </div>
         );
       },

@@ -1,8 +1,4 @@
-import {
-  Row,
-  Col,
-  Image,
-} from "antd";
+import {Row, Col, Image} from "antd";
 import mpesa from "../../images/payments/mpesa.png";
 import tigopesa from "../../images/payments/tigopesa.png";
 import airtelmoney from "../../images/payments/airtelmoney.png";

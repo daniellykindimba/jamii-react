@@ -1,3 +1,4 @@
+import React, {lazy} from "react";
 import {Authenticated, Refine} from "@refinedev/core";
 import {RefineKbar, RefineKbarProvider} from "@refinedev/kbar";
 
@@ -14,7 +15,6 @@ import {ColorModeContextProvider} from "./contexts/color-mode";
 import {Divider, Menu} from "antd";
 import {
   DashboardFilled,
-  DashboardOutlined,
   HomeOutlined,
   MoneyCollectFilled,
   OrderedListOutlined,
@@ -37,12 +37,6 @@ import {ClientLoans} from "./client/pages/loans";
 import {ClientVikoba} from "./client/pages/vikoba";
 import {AppIcon} from "./components/app-icon";
 import configs from "./configs";
-import {ControlHome} from "./control/pages";
-import {ControlDistrict} from "./control/pages/districts";
-import {ControlMembers} from "./control/pages/members";
-import {ControlRegions} from "./control/pages/regions";
-import {ControlRole} from "./control/pages/roles";
-import {ControlVikoba} from "./control/pages/vikoba";
 import {Login} from "./pages/login";
 import {Register} from "./pages/register";
 import {ThemedLayoutV2} from "./components/themedLayout";
@@ -59,197 +53,44 @@ import {ControlMalipConfigs} from "./control/pages/malipo_configs";
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
 
-const getKikobaMenues = () => {
-  let selectedKey = localStorage.getItem("selected") ?? "/";
-  var kikoba = localStorage.getItem("kikoba");
-  if (kikoba) {
-    var kikobaData = JSON.parse(kikoba);
-    return [
-      {
-        key: "kikobaDashboard",
-        selected: selectedKey === "kikobaDashboard" || selectedKey === "/",
-        title: "Dashboard",
-        icon: (
-          <DashboardOutlined
-            style={{
-              color: configs.primaryColor,
-            }}
-          />
-        ),
-        element: <KikobaView />,
-        path: `/vikoba/view/${kikobaData.id}/${kikobaData.registrationNumber}`,
-        pathDefination: `/vikoba/view/:id/:registrationNumber`,
-      },
-      {
-        key: "kikobaDistributions",
-        selected: selectedKey === "kikobaDistributions",
-        title: "Distributions",
-        icon: (
-          <OrderedListOutlined
-            style={{
-              color: configs.primaryColor,
-            }}
-          />
-        ),
-        element: <KikobaDistributionsPage />,
-        path: `/vikoba/${kikobaData.id}/distributions`,
-        pathDefination: `/vikoba/:id/distributions`,
-      },
-      {
-        key: "kikobaShareTransactions",
-        selected: selectedKey === "kikobaShareTransactions",
-        title: "Share Transactions",
-        icon: (
-          <OrderedListOutlined
-            style={{
-              color: configs.primaryColor,
-            }}
-          />
-        ),
-        element: <KikobaTransactionsView />,
-        path: `/vikoba/${kikobaData.id}/transactions`,
-        pathDefination: `/vikoba/:id/transactions`,
-      },
-      {
-        key: "kikobaLoans",
-        selected: selectedKey === "kikobaLoans",
-        title: "Loans",
-        icon: (
-          <OrderedListOutlined
-            style={{
-              color: configs.primaryColor,
-            }}
-          />
-        ),
-        element: <>Comming Soon</>,
-        path: `/vikoba/${kikobaData.id}/loans`,
-        pathDefination: `/vikoba/:id/loans`,
-      },
-      {
-        key: "kikobaInitialShares",
-        selected: selectedKey === "kikobaInitialShares",
-        title: "Initial Shares",
-        icon: (
-          <OrderedListOutlined
-            style={{
-              color: configs.primaryColor,
-            }}
-          />
-        ),
-        element: <>Comming Soon</>,
-        path: `/vikoba/${kikobaData.id}/initialShares`,
-        pathDefination: `/vikoba/:id/initialShares`,
-      },
-      {
-        key: "kikobaChargesPenalties",
-        selected: selectedKey === "kikobaChargesPenalties",
-        title: "Charges/Penalties",
-        icon: (
-          <OrderedListOutlined
-            style={{
-              color: configs.primaryColor,
-            }}
-          />
-        ),
-        element: <>Comming Soon</>,
-        path: `/vikoba/${kikobaData.id}/penalties`,
-        pathDefination: `/vikoba/:id/penalties`,
-      },
-      {
-        key: "kikobaDonations",
-        selected: selectedKey === "kikobaDonations",
-        title: "Donations",
-        icon: (
-          <OrderedListOutlined
-            style={{
-              color: configs.primaryColor,
-            }}
-          />
-        ),
-        element: <>Comming Soon</>,
-        path: `/vikoba/${kikobaData.id}/donations`,
-        pathDefination: `/vikoba/:id/donations`,
-      },
-      {
-        key: "kikobaMembers",
-        selected: selectedKey === "kikobaMembers",
-        title: "Members",
-        icon: (
-          <UserSwitchOutlined
-            style={{
-              color: configs.primaryColor,
-            }}
-          />
-        ),
-        element: <KikobaMembersPage />,
-        path: `/vikoba/${kikobaData.id}/members`,
-        pathDefination: `/vikoba/:id/members`,
-      },
-      {
-        key: "kikobaNames",
-        selected: selectedKey === "kikobaNames",
-        title: "Names",
-        icon: (
-          <UserSwitchOutlined
-            style={{
-              color: configs.primaryColor,
-            }}
-          />
-        ),
-        element: <KikobaNamesPage />,
-        path: `/vikoba/${kikobaData.id}/names`,
-        pathDefination: `/vikoba/:id/names`,
-      },
-      {
-        key: "kikobaLoansApprovers",
-        selected: selectedKey === "kikobaLoansApprovers",
-        title: "Loan Approvers",
-        icon: (
-          <UserSwitchOutlined
-            style={{
-              color: configs.primaryColor,
-            }}
-          />
-        ),
-        element: <KikobaLoanApproversPage />,
-        path: `/vikoba/${kikobaData.id}/loans/approvers`,
-        pathDefination: `/vikoba/:id/loans/approvers`,
-      },
-      {
-        key: "kikobaPayoutsApprovers",
-        selected: selectedKey === "kikobaPayoutsApprovers",
-        title: "Payout Approvers",
-        icon: (
-          <UserSwitchOutlined
-            style={{
-              color: configs.primaryColor,
-            }}
-          />
-        ),
-        element: <KikobaPayoutApproversPage />,
-        path: `/vikoba/${kikobaData.id}/payouts/approvers`,
-        pathDefination: `/vikoba/:id/payouts/approvers`,
-      },
-      {
-        key: "kikobaSettings",
-        selected: selectedKey === "kikobaSettings",
-        title: "Settings",
-        icon: (
-          <SettingOutlined
-            style={{
-              color: configs.primaryColor,
-            }}
-          />
-        ),
-        element: <>Comming Soon</>,
-        path: `/vikoba/${kikobaData.id}/settings`,
-        pathDefination: `/vikoba/:id/settings`,
-      },
-    ];
-  } else {
-    return [];
-  }
-};
+
+// import {ControlHome} from "./control/pages";
+// import {ControlDistrict} from "./control/pages/districts";
+const ControlDistrict = lazy(() =>
+  import("./control/pages/districts").then((module) => ({
+    default: module.ControlDistrict,
+  }))
+);
+
+// import {ControlMembers} from "./control/pages/members";
+const ControlMembers = lazy(() =>
+  import("./control/pages/members").then((module) => ({
+    default: module.ControlMembers,
+  }))
+);
+// import {ControlRegions} from "./control/pages/regions";
+const ControlRegions = lazy(() =>
+  import("./control/pages/regions").then((module) => ({
+    default: module.ControlRegions,
+  }))
+);
+// import {ControlRole} from "./control/pages/roles";
+const ControlRole = lazy(() =>
+  import("./control/pages/roles").then((module) => ({
+    default: module.ControlRole,
+  }))
+);
+// import {ControlVikoba} from "./control/pages/vikoba";
+const ControlVikoba = lazy(() =>
+  import("./control/pages/vikoba").then((module) => ({
+    default: module.ControlVikoba,
+  }))
+);
+
+// lazy load ControlHome component
+const ControlHome = React.lazy(() =>
+  import("./control/pages").then((module) => ({default: module.ControlHome}))
+);
 
 function App() {
   const {t, i18n} = useTranslation();

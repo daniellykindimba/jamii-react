@@ -11,6 +11,7 @@ interface AnalyticsData {
   totalUsers: number;
   totalVikoba: number;
   totalVikobaMembers: number;
+  totalDonations: number;
 }
 
 interface Props {}
@@ -21,6 +22,7 @@ export const ControlHome: React.FC<Props> = (props: Props) => {
     totalUsers: 0,
     totalVikoba: 0,
     totalVikobaMembers: 0,
+    totalDonations: 0,
   });
 
   const authProvider = useActiveAuthProvider();
@@ -61,7 +63,7 @@ export const ControlHome: React.FC<Props> = (props: Props) => {
     <>
       <Row>
         <Col span={isMobile ? 12 : 4}>
-          <Card bordered={false}>
+          <Card bordered={false} size="small">
             <Statistic
               title="Total Users"
               loading={loading}
@@ -72,7 +74,7 @@ export const ControlHome: React.FC<Props> = (props: Props) => {
           </Card>
         </Col>
         <Col span={isMobile ? 12 : 4}>
-          <Card bordered={false}>
+          <Card bordered={false} size="small">
             <Statistic
               title="Total Vikoba"
               loading={loading}
@@ -84,11 +86,23 @@ export const ControlHome: React.FC<Props> = (props: Props) => {
         </Col>
 
         <Col span={isMobile ? 12 : 4}>
-          <Card bordered={false}>
+          <Card bordered={false} size="small">
             <Statistic
               title="Total Vikoba Members"
               loading={loading}
               value={analytics.totalVikobaMembers}
+              precision={0}
+              valueStyle={{color: "#3f8600"}}
+            />
+          </Card>
+        </Col>
+
+        <Col span={isMobile ? 12 : 4}>
+          <Card bordered={false} size="small">
+            <Statistic
+              title="Total Donations"
+              loading={loading}
+              value={analytics.totalDonations}
               precision={0}
               valueStyle={{color: "#3f8600"}}
             />

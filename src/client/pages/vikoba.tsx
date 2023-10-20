@@ -39,6 +39,7 @@ import {KikobaExtendedData, KikobaData} from "../../interfaces";
 import {NewKikobaForm} from "../components/form/create_new_kikoba_form";
 import {UpdateKikobaForm} from "../components/form/update_kikoba_form";
 import {KikobaInfosComponent} from "../components/kikoba_infos";
+import {CurrencyFormatter} from "../../components/currency/currency_formatter";
 
 interface Props {}
 
@@ -223,7 +224,6 @@ export const ClientVikoba: React.FC<Props> = (props: Props) => {
                   size="large"
                   icon={<FolderAddOutlined />}
                   type="primary"
-                  shape="round"
                   style={{
                     marginRight: 5,
                   }}
@@ -233,7 +233,6 @@ export const ClientVikoba: React.FC<Props> = (props: Props) => {
                 <Button
                   size="large"
                   icon={<FolderAddOutlined />}
-                  shape="round"
                   onClick={() => setCreateNewKikoba(true)}
                   type="primary"
                 >
@@ -301,18 +300,6 @@ export const ClientVikoba: React.FC<Props> = (props: Props) => {
                 <Button
                   size="large"
                   icon={<FolderAddOutlined />}
-                  type="primary"
-                  shape="round"
-                  style={{
-                    marginRight: 5,
-                  }}
-                >
-                  Join Kikoba
-                </Button>
-                <Button
-                  size="large"
-                  icon={<FolderAddOutlined />}
-                  shape="round"
                   onClick={() => setCreateNewKikoba(true)}
                   type="primary"
                 >
@@ -336,9 +323,11 @@ export const ClientVikoba: React.FC<Props> = (props: Props) => {
             {vikoba?.map((v) => {
               return (
                 <Col span={isMobile ? 24 : 8} style={{marginBottom: 10}}>
-                  <div style={{
-                    margin: 5,
-                  }}>
+                  <div
+                    style={{
+                      margin: 5,
+                    }}
+                  >
                     <Card
                       title={
                         <>
@@ -354,33 +343,19 @@ export const ClientVikoba: React.FC<Props> = (props: Props) => {
                       <div>
                         <Descriptions bordered size={"small"} column={1}>
                           <Descriptions.Item label="Initial Share">
-                            {new Intl.NumberFormat("en-US", {
-                              style: "currency",
-                              currency: "TZS",
-                            })
-                              .formatToParts(v.initialShare)
-                              .map((p) =>
-                                p.type !== "literal" && p.type !== "currency"
-                                  ? p.value
-                                  : ""
-                              )
-                              .join("")}
+                            <CurrencyFormatter
+                              amount={v.initialShare}
+                              currency="TZS"
+                            />
                           </Descriptions.Item>
                           <Descriptions.Item label="Contribution Frequency">
                             {v.contributionType}
                           </Descriptions.Item>
                           <Descriptions.Item label="Contribution Amount">
-                            {new Intl.NumberFormat("en-US", {
-                              style: "currency",
-                              currency: "TZS",
-                            })
-                              .formatToParts(v.contributionAmount)
-                              .map((p) =>
-                                p.type !== "literal" && p.type !== "currency"
-                                  ? p.value
-                                  : ""
-                              )
-                              .join("")}
+                            <CurrencyFormatter
+                              amount={v.contributionAmount}
+                              currency="TZS"
+                            />
                           </Descriptions.Item>
                           <Descriptions.Item label="Interest Rate">
                             {v.interestRate}

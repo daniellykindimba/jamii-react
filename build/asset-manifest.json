@@ -1,17 +1,29 @@
 {
   "files": {
     "main.css": "/static/css/main.dd1ea7b7.css",
-    "main.js": "/static/js/main.a25d6a9b.js",
+    "main.js": "/static/js/main.49b27277.js",
+    "static/js/341.b9a512a9.chunk.js": "/static/js/341.b9a512a9.chunk.js",
+    "static/js/258.3209ea72.chunk.js": "/static/js/258.3209ea72.chunk.js",
+    "static/js/459.5beb95c7.chunk.js": "/static/js/459.5beb95c7.chunk.js",
+    "static/js/431.572628da.chunk.js": "/static/js/431.572628da.chunk.js",
+    "static/js/821.817fb433.chunk.js": "/static/js/821.817fb433.chunk.js",
+    "static/js/116.c54cd091.chunk.js": "/static/js/116.c54cd091.chunk.js",
     "static/js/787.33c510f5.chunk.js": "/static/js/787.33c510f5.chunk.js",
     "static/media/tigopesa.png": "/static/media/tigopesa.257707af6e515b02d34b.png",
     "index.html": "/index.html",
     "static/media/tanzania-flat.svg": "/static/media/tanzania-flat.0081a0d626da244ea2203d7ef2c52d08.svg",
     "main.dd1ea7b7.css.map": "/static/css/main.dd1ea7b7.css.map",
-    "main.a25d6a9b.js.map": "/static/js/main.a25d6a9b.js.map",
+    "main.49b27277.js.map": "/static/js/main.49b27277.js.map",
+    "341.b9a512a9.chunk.js.map": "/static/js/341.b9a512a9.chunk.js.map",
+    "258.3209ea72.chunk.js.map": "/static/js/258.3209ea72.chunk.js.map",
+    "459.5beb95c7.chunk.js.map": "/static/js/459.5beb95c7.chunk.js.map",
+    "431.572628da.chunk.js.map": "/static/js/431.572628da.chunk.js.map",
+    "821.817fb433.chunk.js.map": "/static/js/821.817fb433.chunk.js.map",
+    "116.c54cd091.chunk.js.map": "/static/js/116.c54cd091.chunk.js.map",
     "787.33c510f5.chunk.js.map": "/static/js/787.33c510f5.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.dd1ea7b7.css",
-    "static/js/main.a25d6a9b.js"
+    "static/js/main.49b27277.js"
   ]
 }

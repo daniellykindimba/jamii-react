@@ -18,6 +18,7 @@ import simpleRestProvider from "../../api";
 import configs from "../../configs";
 import {KikobaData, KikobaTransactionData} from "../../interfaces";
 import {useParams} from "react-router-dom";
+import {CurrencyFormatter} from "../../components/currency/currency_formatter";
 
 interface searchFormData {
   key: string;
@@ -100,15 +101,7 @@ export const KikobaAllSharesTransactionsComponent: React.FC<Props> = (
       key: "name",
       render: (text: string, record: any) => (
         <span style={{float: "right"}}>
-          {new Intl.NumberFormat("en-US", {
-            style: "currency",
-            currency: "TZS",
-          })
-            .formatToParts(record.amount)
-            .map((p) =>
-              p.type !== "literal" && p.type !== "currency" ? p.value : ""
-            )
-            .join("")}
+          <CurrencyFormatter amount={record.amount} currency="TZS" />
         </span>
       ),
     },

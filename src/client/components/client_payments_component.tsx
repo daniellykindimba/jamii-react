@@ -31,6 +31,7 @@ export const ClientPaymentsComponent: React.FC<Props> = (props: Props) => {
             }}
           >
             <Card
+              size="small"
               style={{
                 width: "35vw",
                 display: "flex",
@@ -42,7 +43,6 @@ export const ClientPaymentsComponent: React.FC<Props> = (props: Props) => {
               <Button
                 size="large"
                 style={{fontSize: "18px"}}
-                shape="round"
                 onClick={() => setContributionModal(true)}
                 icon={<PayCircleFilled style={{color: "#FF2B18"}} />}
               >
@@ -51,6 +51,7 @@ export const ClientPaymentsComponent: React.FC<Props> = (props: Props) => {
             </Card>
 
             <Card
+              size="small"
               style={{
                 width: "35vw",
                 display: "flex",
@@ -62,7 +63,6 @@ export const ClientPaymentsComponent: React.FC<Props> = (props: Props) => {
               <Button
                 size="large"
                 style={{fontSize: "18px"}}
-                shape="round"
                 onClick={() => setInitialShareModal(true)}
                 icon={<PayCircleFilled style={{color: "#FF2B18"}} />}
               >
@@ -71,6 +71,7 @@ export const ClientPaymentsComponent: React.FC<Props> = (props: Props) => {
             </Card>
 
             <Card
+              size="small"
               style={{
                 width: "35vw",
                 display: "flex",
@@ -82,7 +83,6 @@ export const ClientPaymentsComponent: React.FC<Props> = (props: Props) => {
               <Button
                 size="large"
                 style={{fontSize: "18px"}}
-                shape="round"
                 onClick={() => setLoanModal(true)}
                 icon={<PayCircleFilled style={{color: "#FF2B18"}} />}
               >
@@ -97,6 +97,7 @@ export const ClientPaymentsComponent: React.FC<Props> = (props: Props) => {
         <Row>
           <Col span={24}>
             <Card
+            size="small"
               style={{
                 display: "flex",
                 justifyContent: "center",
@@ -117,6 +118,7 @@ export const ClientPaymentsComponent: React.FC<Props> = (props: Props) => {
           </Col>
           <Col span={24}>
             <Card
+            size="small"
               style={{
                 display: "flex",
                 justifyContent: "center",
@@ -137,6 +139,7 @@ export const ClientPaymentsComponent: React.FC<Props> = (props: Props) => {
           </Col>
           <Col span={24}>
             <Card
+            size="small"
               style={{
                 display: "flex",
                 justifyContent: "center",
@@ -166,6 +169,10 @@ export const ClientPaymentsComponent: React.FC<Props> = (props: Props) => {
         footer={[]}
         onOk={() => {}}
         onCancel={() => setContributionModal(false)}
+        bodyStyle={{
+          padding: "0px",
+        }}
+        style={{top: "0px", left: "0px", right: "0px", bottom: "0px"}}
       >
         <ClientPaymentsAddingComponent serviceTag="kikoba_contribution_payment" />
       </Modal>
@@ -178,6 +185,10 @@ export const ClientPaymentsComponent: React.FC<Props> = (props: Props) => {
         footer={[]}
         onOk={() => {}}
         onCancel={() => setInitialShareModal(false)}
+        bodyStyle={{
+          padding: "0px",
+        }}
+        style={{top: "0px", left: "0px", right: "0px", bottom: "0px"}}
       >
         <ClientPaymentsAddingComponent serviceTag="kikoba_initial_shares_payment" />
       </Modal>
@@ -190,6 +201,10 @@ export const ClientPaymentsComponent: React.FC<Props> = (props: Props) => {
         footer={[]}
         onOk={() => {}}
         onCancel={() => setLoanModal(false)}
+        bodyStyle={{
+          padding: "0px",
+        }}
+        style={{top: "0px", left: "0px", right: "0px", bottom: "0px"}}
       >
         <ClientLoanPaymentComponent serviceTag="kikoba_loans_payment" />
       </Modal>

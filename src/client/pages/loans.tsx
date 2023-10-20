@@ -6,6 +6,7 @@ import {KikobaLoanData} from "../../interfaces";
 import simpleRestProvider from "../../api";
 import configs from "../../configs";
 import {KikobaLoanRequestApproversComponent} from "../components/kikoba_loan_request_approvers_status";
+import {CurrencyFormatter} from "../../components/currency/currency_formatter";
 
 interface Props {}
 
@@ -28,15 +29,7 @@ export const ClientLoans: React.FC<Props> = (props: Props) => {
       key: "loanAmount",
       render: (_: any, record: KikobaLoanData) => (
         <>
-          {new Intl.NumberFormat("en-US", {
-            style: "currency",
-            currency: "TZS",
-          })
-            .formatToParts(record.amount)
-            .map((p) =>
-              p.type !== "literal" && p.type !== "currency" ? p.value : ""
-            )
-            .join("")}
+          <CurrencyFormatter amount={record.amount} currency="TZS" />
         </>
       ),
     },
@@ -46,15 +39,7 @@ export const ClientLoans: React.FC<Props> = (props: Props) => {
       key: "paidLoanAmount",
       render: (_: any, record: KikobaLoanData) => (
         <>
-          {new Intl.NumberFormat("en-US", {
-            style: "currency",
-            currency: "TZS",
-          })
-            .formatToParts(record.paidAmount)
-            .map((p) =>
-              p.type !== "literal" && p.type !== "currency" ? p.value : ""
-            )
-            .join("")}
+          <CurrencyFormatter amount={record.paidAmount} currency="TZS" />
         </>
       ),
     },
@@ -84,6 +69,7 @@ export const ClientLoans: React.FC<Props> = (props: Props) => {
     page: number = 1,
     pageSize: number = 25
   ) => {
+    setLoading(true);
     const data = await simpleRestProvider.custom!({
       method: "get",
       url:
@@ -100,6 +86,7 @@ export const ClientLoans: React.FC<Props> = (props: Props) => {
     if (data.data) {
       setLoans(data.data.data);
     }
+    setLoading(false);
   };
 
   const handleApprovalModal = (loan: KikobaLoanData) => {
@@ -124,7 +111,12 @@ export const ClientLoans: React.FC<Props> = (props: Props) => {
           },
         ]}
       />
-      <Table dataSource={loans} columns={columns} />
+      <Table
+        size="small"
+        loading={loading}
+        dataSource={loans}
+        columns={columns}
+      />
 
       <Modal
         title="Loan Approvers"

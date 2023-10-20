@@ -33,6 +33,7 @@ import {CreateDonationForm} from "../../components/form/create_donation_form";
 import moment from "moment";
 import {EditDonationForm} from "../../components/form/edit_donation_form";
 import {DonationDashboard} from "./doantion_dashboard";
+import {CurrencyFormatter} from "../../../components/currency/currency_formatter";
 
 interface RegionsSearchFormData {
   key: string;
@@ -186,7 +187,7 @@ export const DonationsPage: React.FC<Props> = (props: Props) => {
     {
       title: "Donation#",
       dataIndex: "id",
-      render: (text: any, row: any, index: any) => (
+      render: (text: any, row: DonationData, index: any) => (
         <a onClick={() => handleManageDonation(row)}>
           <span>{row.donationNumber}</span>
         </a>
@@ -195,47 +196,53 @@ export const DonationsPage: React.FC<Props> = (props: Props) => {
     {
       title: "Title",
       dataIndex: "title",
-      render: (text: any, row: any, index: any) => <span>{row.title}</span>,
+      render: (text: any, row: DonationData, index: any) => (
+        <span>{row.title}</span>
+      ),
     },
     {
       title: "Deadline",
       dataIndex: "deadline",
-      render: (text: any, row: any, index: any) => (
+      render: (text: any, row: DonationData, index: any) => (
         <span>{moment(row.deadline).format("MMMM Do YYYY, h:mm:ss a")}</span>
       ),
     },
     {
       title: "Goal Amount",
       dataIndex: "goalAmount",
-      render: (text: any, row: any, index: any) => (
-        <span>{row.totalAmount}</span>
+      render: (text: any, row: DonationData, index: any) => (
+        <span>
+          <CurrencyFormatter currency="TZS" amount={row.totalAmount} />
+        </span>
       ),
     },
     {
       title: "Donated Amount",
       dataIndex: "donatedAmount",
-      render: (text: any, row: any, index: any) => (
-        <span>{row.totalDonations}</span>
+      render: (text: any, row: DonationData, index: any) => (
+        <span>
+          <CurrencyFormatter currency="TZS" amount={row.totalDonations} />
+        </span>
       ),
     },
     {
       title: "Total Donars",
       dataIndex: "totalDonators",
-      render: (text: any, row: any, index: any) => (
+      render: (text: any, row: DonationData, index: any) => (
         <span>{row.totalDonators}</span>
       ),
     },
     {
       title: "Public",
       dataIndex: "public",
-      render: (text: any, row: any, index: any) => (
+      render: (text: any, row: DonationData, index: any) => (
         <span>{row.isPublic ? "Yes" : "No"}</span>
       ),
     },
     {
       title: "Status",
       dataIndex: "isActive",
-      render: (text: any, row: any, index: any) => (
+      render: (text: any, row: DonationData, index: any) => (
         <a>
           {row?.isActive ? (
             <Popconfirm
@@ -274,8 +281,10 @@ export const DonationsPage: React.FC<Props> = (props: Props) => {
             onCancel={() => cancelDelete}
             okText="Yes"
             cancelText="No"
+            disabled={row?.user?.id !== user?.id}
           >
             <Button
+              disabled={row?.user?.id !== user?.id}
               type="primary"
               icon={<DeleteOutlined />}
               style={{marginRight: 3}}
@@ -283,6 +292,7 @@ export const DonationsPage: React.FC<Props> = (props: Props) => {
           </Popconfirm>
 
           <Button
+            disabled={row?.user?.id !== user?.id}
             type="primary"
             onClick={() => handleEditDonation(row)}
             icon={<EditOutlined />}
@@ -381,14 +391,14 @@ export const DonationsPage: React.FC<Props> = (props: Props) => {
           >
             Create Donation
           </Button>
-          <Button
+          {/* <Button
             icon={<OrderedListOutlined />}
             type="primary"
             size="large"
             onClick={() => {}}
           >
             View Public Donations
-          </Button>
+          </Button> */}
         </Col>
       </Row>
 

@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react-hooks/exhaustive-deps */
-import {DeleteOutlined, EditOutlined, UserOutlined} from "@ant-design/icons";
+import {DeleteOutlined, UserOutlined} from "@ant-design/icons";
 import {
   useActiveAuthProvider,
   useGetIdentity,
@@ -11,15 +11,13 @@ import {
   Button,
   Card,
   Form,
-  Grid,
   List,
   Popconfirm,
-  Table,
+  Spin,
   Tag,
   message,
 } from "antd";
 import {useState, useEffect} from "react";
-import {useParams} from "react-router-dom";
 import simpleRestProvider from "../../../../api";
 import configs from "../../../../configs";
 import {
@@ -28,6 +26,7 @@ import {
   RegionData,
 } from "../../../../interfaces";
 import InfiniteScroll from "react-infinite-scroll-component";
+import {CurrencyFormatter} from "../../../../components/currency/currency_formatter";
 interface RegionsSearchFormData {
   key: string;
 }
@@ -117,62 +116,64 @@ export const DonationsComponent: React.FC<Props> = (props: Props) => {
   return (
     <>
       <Card title="Donations">
-        <InfiniteScroll
-          dataLength={total}
-          next={() => getPayments(page + 1, searchKey, limit)}
-          hasMore={total > payments.length}
-          loader={<h4>Loading...</h4>}
-          endMessage={
-            <p style={{textAlign: "center"}}>
-              <b>Yay! You have seen it all</b>
-            </p>
-          }
-          // below props only if you need pull down functionality
-          refreshFunction={() => getPayments(1, searchKey, limit)}
-          pullDownToRefresh
-          pullDownToRefreshThreshold={50}
-        >
-          <List
-            dataSource={payments}
-            renderItem={(payment) => (
-              <List.Item
-                key={payment.user.phone}
-                extra={[
-                  <Popconfirm
-                    title={"Are you sure to delete this Payment?"}
-                    onConfirm={() => confirmDelete(payment?.id)}
-                    onCancel={() => {}}
-                    okText="Yes"
-                    cancelText="No"
-                  >
-                    <Button
-                      type="primary"
-                      icon={<DeleteOutlined />}
-                      style={{marginRight: 3}}
-                    ></Button>
-                  </Popconfirm>,
-                ]}
-              >
-                <List.Item.Meta
-                  avatar={<Avatar icon={<UserOutlined />} />}
-                  title={
-                    <a>
-                      {payment.user.fullName}
-                      <Tag style={{marginLeft: 5}} color="green">
-                        {/* format currency in thousands */}
-                        {payment.amount.toLocaleString("en-US", {
-                          style: "currency",
-                          currency: "TZS",
-                        })}
-                      </Tag>
-                    </a>
-                  }
-                  description={payment.user.phone}
-                />
-              </List.Item>
-            )}
-          />
-        </InfiniteScroll>
+        <Spin spinning={loading}>
+          <InfiniteScroll
+            dataLength={total}
+            next={() => getPayments(page + 1, searchKey, limit)}
+            hasMore={total > payments.length}
+            loader={<h4>Loading...</h4>}
+            endMessage={
+              <p style={{textAlign: "center"}}>
+                <b>Yay! You have seen it all</b>
+              </p>
+            }
+            // below props only if you need pull down functionality
+            refreshFunction={() => getPayments(1, searchKey, limit)}
+            pullDownToRefresh
+            pullDownToRefreshThreshold={50}
+          >
+            <List
+              dataSource={payments}
+              renderItem={(payment) => (
+                <List.Item
+                  key={payment.user.phone}
+                  extra={[
+                    <Popconfirm
+                      title={"Are you sure to delete this Payment?"}
+                      onConfirm={() => confirmDelete(payment?.id)}
+                      onCancel={() => {}}
+                      okText="Yes"
+                      cancelText="No"
+                    >
+                      <Button
+                        disabled={props.donation?.user.id !== user?.id}
+                        type="primary"
+                        icon={<DeleteOutlined />}
+                        style={{marginRight: 3}}
+                      ></Button>
+                    </Popconfirm>,
+                  ]}
+                >
+                  <List.Item.Meta
+                    avatar={<Avatar icon={<UserOutlined />} />}
+                    title={
+                      <a>
+                        {payment.user.fullName}
+                        <Tag style={{marginLeft: 5}} color="green">
+                          <CurrencyFormatter
+                            amount={payment.amount}
+                            currency="TZS"
+                          />
+                        </Tag>
+                      </a>
+                    }
+                    description={payment.user.phone}
+                  />
+                </List.Item>
+              )}
+            />
+          </InfiniteScroll>
+        </Spin>
       </Card>
     </>
   );

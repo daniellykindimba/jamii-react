@@ -40,14 +40,6 @@ import {DonationMembersComponent} from "./components/donation_members";
 import {DonationsComponent} from "./components/donations";
 import {DonationDisbursementsComponent} from "./components/disbursements";
 
-interface RegionsSearchFormData {
-  key: string;
-}
-
-interface RegionFormData {
-  name: string;
-}
-
 interface Props {
   onUpdate?: any;
   donation?: DonationData;
@@ -67,15 +59,13 @@ export const DonationDashboard: React.FC<Props> = (props: Props) => {
   const [totalDonations, setTotalDonations] = useState(
     props.donation?.totalDonations
   );
-  const [totalDibursements, setTotalDisbursements] = useState(
+  const [totalDisbursements, setTotalDisbursements] = useState(
     props.donation?.totalDisbursements
   );
 
-  const [manageModal, setManageModal] = useState(false);
-
   const getDonation = async () => {
     setLoading(true);
-    const {data} = await simpleRestProvider.custom!<RegionData | any>({
+    const {data} = await simpleRestProvider.custom!<DonationData | any>({
       url: configs.apiUrl + `/donation/${props.donation?.id}`,
       method: "get",
     })
@@ -101,14 +91,19 @@ export const DonationDashboard: React.FC<Props> = (props: Props) => {
     setRandKey(Math.random());
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    console.log(props.donation?.user.id);
+    console.log(user);
+    console.log(props.donation?.user.id === user?.id);
+    console.log(props.donation);
+  }, []);
 
   return (
     <>
-      <Card>
+      <Card size="small">
         <Row gutter={16}>
           <Col span={8}>
-            <Card bordered={false}>
+            <Card bordered={false} size="small">
               <Statistic
                 title="Donors"
                 value={totalDonators}
@@ -119,7 +114,7 @@ export const DonationDashboard: React.FC<Props> = (props: Props) => {
             </Card>
           </Col>
           <Col span={8}>
-            <Card bordered={false}>
+            <Card bordered={false} size="small">
               <Statistic
                 title="Total Donations"
                 value={totalDonations}
@@ -129,17 +124,19 @@ export const DonationDashboard: React.FC<Props> = (props: Props) => {
               />
             </Card>
           </Col>
-          <Col span={8}>
-            <Card bordered={false}>
-              <Statistic
-                title="Total Disbursements"
-                value={totalDibursements}
-                precision={2}
-                valueStyle={{color: "#055E2B"}}
-                prefix={<ArrowUpOutlined />}
-              />
-            </Card>
-          </Col>
+          {props.donation?.user.id === user?.id && (
+            <Col span={8}>
+              <Card bordered={false} size="small">
+                <Statistic
+                  title="Total Disbursements"
+                  value={totalDisbursements}
+                  precision={2}
+                  valueStyle={{color: "#055E2B"}}
+                  prefix={<ArrowUpOutlined />}
+                />
+              </Card>
+            </Col>
+          )}
         </Row>
       </Card>
       <Row>
@@ -159,13 +156,15 @@ export const DonationDashboard: React.FC<Props> = (props: Props) => {
           />
         </Col>
 
-        <Col span={8}>
-          <DonationDisbursementsComponent
-            donation={props.donation}
-            onUpdate={handleOnUpdate}
-            randKey={randKey}
-          />
-        </Col>
+        {props.donation?.user.id === user?.id && (
+          <Col span={8}>
+            <DonationDisbursementsComponent
+              donation={props.donation}
+              onUpdate={handleOnUpdate}
+              randKey={randKey}
+            />
+          </Col>
+        )}
       </Row>
     </>
   );

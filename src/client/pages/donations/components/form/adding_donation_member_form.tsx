@@ -165,7 +165,8 @@ export const AddingDonationMemberForm: React.FC<Props> = (props: Props) => {
                           setStep(0);
                           return Promise.resolve();
                         } else {
-                          return Promise.reject(data.data.message);
+                          setStep(2);
+                          message.info(data.data.message);
                         }
                       }
                     }

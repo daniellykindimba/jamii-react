@@ -190,6 +190,7 @@ export const ControlMembers: React.FC<Props> = (props: Props) => {
       </Row>
       <div>
         <Table
+          size="small"
           dataSource={members}
           columns={columns}
           scroll={{x: true}}

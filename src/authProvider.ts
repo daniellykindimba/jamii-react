@@ -115,7 +115,7 @@ export const authProvider: AuthBindings = {
     const token = localStorage.getItem(TOKEN_KEY);
     if (!token) {
       return {};
-    }else{
+    } else {
       // sync the user in background
       syncUser();
     }

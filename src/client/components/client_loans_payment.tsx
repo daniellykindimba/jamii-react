@@ -14,6 +14,7 @@ import {
   InputNumber,
   Alert,
   Card,
+  Grid,
 } from "antd";
 import {useEffect, useState} from "react";
 import {KikobaLoanData, KikobaMemberData} from "../../interfaces";
@@ -36,6 +37,8 @@ export const ClientLoanPaymentComponent: React.FC<Props> = (props: Props) => {
   const [loans, setLoans] = useState<KikobaLoanData[]>([]);
   const [loan, setLoan] = useState<KikobaLoanData | any>(null);
   const [contributionModal, setContributionModal] = useState(false);
+  const breakpoint = Grid.useBreakpoint();
+  const isMobile = !breakpoint.lg;
 
   const getKikobas = async () => {
     setLoading(true);
@@ -80,17 +83,21 @@ export const ClientLoanPaymentComponent: React.FC<Props> = (props: Props) => {
           loading={loading}
           renderItem={(loan: KikobaLoanData) => (
             <List.Item
-              actions={[
-                <Button
-                  type="primary"
-                  onClick={() => {
-                    handleLoanPaymentModal(loan);
-                  }}
-                  icon={<PayCircleFilled />}
-                >
-                  Pay
-                </Button>,
-              ]}
+              actions={
+                isMobile
+                  ? []
+                  : [
+                      <Button
+                        type="primary"
+                        onClick={() => {
+                          handleLoanPaymentModal(loan);
+                        }}
+                        icon={<PayCircleFilled />}
+                      >
+                        Pay
+                      </Button>,
+                    ]
+              }
             >
               <span>
                 <span style={{fontSize: 22}}>
@@ -111,6 +118,20 @@ export const ClientLoanPaymentComponent: React.FC<Props> = (props: Props) => {
                 <Tag color="green" style={{marginLeft: 10}}>
                   {loan.kikoba.name}
                 </Tag>
+                {isMobile && (
+                  <div>
+                    <Button
+                      style={{float: "right"}}
+                      type="primary"
+                      onClick={() => {
+                        handleLoanPaymentModal(loan);
+                      }}
+                      icon={<PayCircleFilled />}
+                    >
+                      Pay
+                    </Button>
+                  </div>
+                )}
               </span>
             </List.Item>
           )}

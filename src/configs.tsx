@@ -1,4 +1,4 @@
-const apiUrl = "http://dev.olbongo.com:3001";
+const apiUrl = "http://dev.olbongo.com:8080";
 // const apiUrl = "https://api.jamii.co.tz";
 
 const configs = {

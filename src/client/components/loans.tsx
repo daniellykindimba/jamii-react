@@ -27,6 +27,7 @@ import {KikobaLoanApplicationForm} from "./form/kikoba_loan_application_form";
 import {LoansRequestsComponent} from "./loans_requests";
 import {LoanRepaymentsComponent} from "./loan_repayments";
 import {ThousandsFormatterComponent} from "./thousands_formatter";
+import {CurrencyFormatter} from "../../components/currency/currency_formatter";
 
 const {Text} = Typography;
 
@@ -169,7 +170,7 @@ export const KikobaLoansComponent: React.FC<Props> = (props: Props) => {
             itemLayout="horizontal"
             dataSource={loans}
             loading={loading}
-            renderItem={(item) => {
+            renderItem={(item: KikobaLoanData) => {
               var fullName = `${item.kikobaMember.member.firstName} ${item.kikobaMember.member.middleName} ${item.kikobaMember.member.lastName}`;
               return (
                 <List.Item
@@ -220,8 +221,9 @@ export const KikobaLoansComponent: React.FC<Props> = (props: Props) => {
                                 style={{marginLeft: 5, fontSize: 12}}
                                 color="green"
                               >
-                                <ThousandsFormatterComponent
+                                <CurrencyFormatter
                                   amount={item.amount}
+                                  currency="TZS"
                                 />
                               </Tag>
                             </Tooltip>
@@ -333,7 +335,7 @@ const KikobaMemberLoanRepaymentTotal: React.FC<RepaymentProps> = (
     <>
       <Tooltip title="Total Amount of Loan Paid">
         <Tag style={{marginLeft: 5, fontSize: 12}} color="red">
-          <ThousandsFormatterComponent amount={amount} />
+          <CurrencyFormatter amount={amount} currency="TZS" />
         </Tag>
       </Tooltip>
     </>

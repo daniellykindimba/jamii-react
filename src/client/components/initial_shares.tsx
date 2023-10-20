@@ -20,6 +20,7 @@ import configs from "../../configs";
 import {KikobaData, KikobaContributionData} from "../../interfaces";
 import {KikobaMembersToAddInitialSharesComponent} from "./kikoba_members_to_add_initial_shares";
 import {ThousandsFormatterComponent} from "./thousands_formatter";
+import {CurrencyFormatter} from "../../components/currency/currency_formatter";
 const {Text} = Typography;
 
 interface Props {
@@ -132,7 +133,7 @@ export const KikobaInitialSharesComponent: React.FC<Props> = (props: Props) => {
             itemLayout="horizontal"
             dataSource={shares}
             loading={loading}
-            renderItem={(item) => {
+            renderItem={(item: KikobaContributionData) => {
               var fullName = `${item.kikobaMember.member.firstName} ${item.kikobaMember.member.middleName} ${item.kikobaMember.member.lastName}`;
               return (
                 <List.Item
@@ -169,9 +170,14 @@ export const KikobaInitialSharesComponent: React.FC<Props> = (props: Props) => {
                   ]}
                 >
                   <List.Item.Meta
-                    avatar={<Avatar icon={<UserOutlined />}  style={{
-                      backgroundColor: configs.primaryColor
-                    }}/>}
+                    avatar={
+                      <Avatar
+                        icon={<UserOutlined />}
+                        style={{
+                          backgroundColor: configs.primaryColor,
+                        }}
+                      />
+                    }
                     title={
                       <>
                         <span style={{display: "block"}}>
@@ -192,8 +198,9 @@ export const KikobaInitialSharesComponent: React.FC<Props> = (props: Props) => {
                               style={{marginLeft: 5, fontSize: 12}}
                               color="green"
                             >
-                              <ThousandsFormatterComponent
+                              <CurrencyFormatter
                                 amount={item.amount}
+                                currency="TZS"
                               />
                             </Tag>
                           </a>

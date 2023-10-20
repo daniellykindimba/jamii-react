@@ -43,6 +43,7 @@ export interface SystemSettingsData {
 export const Register: React.FC = () => {
   const [form] = Form.useForm<registerForm>();
   const [phone, setPhone] = useState("");
+  const [loading, setLoading] = useState(false);
   const [registered, setRegistered] = useState(false);
   const [otpVerification, setOtpVerification] = useState(false);
   const [userVerified, setUserVerified] = useState(false);
@@ -54,6 +55,7 @@ export const Register: React.FC = () => {
   const to = new Array(params.to).filter((value) => value !== null).join(",");
 
   const verifyUserOtp = async (phone: string, otp: string) => {
+    setLoading(true);
     let formData = new FormData();
     formData.append("phone", phone);
     formData.append("otp", otp);
@@ -83,9 +85,11 @@ export const Register: React.FC = () => {
     }
     setVerifyingOtp(false);
     setOtpVerification(false);
+    setLoading(false);
   };
 
   const createOtp = async (phone: string) => {
+    setLoading(true);
     let formData = new FormData();
     formData.append("phone", phone);
     const data = await simpleRestProvider.custom!({
@@ -102,10 +106,13 @@ export const Register: React.FC = () => {
       .catch((err) => {
         return {data: null};
       });
+
+    setLoading(false);
   };
 
   const customRegister = async (values: registerForm) => {
     message.destroy();
+    setLoading(true);
     setPhone(values.phone);
     let formData = new FormData();
     formData.append("full_name", values.fullName);
@@ -139,8 +146,7 @@ export const Register: React.FC = () => {
         message.error(data.data.message);
       }
     }
-
-    console.log(data);
+    setLoading(false);
   };
 
   const CardTitle = (
@@ -218,6 +224,7 @@ export const Register: React.FC = () => {
                 {!otpVerification && !userVerified && (
                   <Card
                     title={CardTitle}
+                    loading={loading}
                     headStyle={{borderBottom: 0, marginTop: 20}}
                   >
                     <Form<registerForm>
@@ -406,6 +413,8 @@ export const Register: React.FC = () => {
                         }}
                         htmlType="submit"
                         block
+                        loading={loading}
+                        disabled={loading}
                       >
                         Sign up
                       </Button>
@@ -428,6 +437,7 @@ export const Register: React.FC = () => {
                   <Card
                     title={CardTitle}
                     headStyle={{borderBottom: 0, marginTop: 20}}
+                    loading={loading || verifyingOtp}
                   >
                     <Form<verifyOtpForm>
                       layout="vertical"
@@ -468,6 +478,8 @@ export const Register: React.FC = () => {
                         }}
                         onClick={() => verifyForm.submit()}
                         block
+                        loading={verifyingOtp || loading}
+                        disabled={verifyingOtp || loading}
                       >
                         Verify
                       </Button>

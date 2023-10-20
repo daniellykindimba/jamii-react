@@ -15,6 +15,7 @@ import {
   Tooltip,
   Alert,
   Card,
+  Grid,
 } from "antd";
 import {useEffect, useState} from "react";
 import {KikobaData, KikobaMemberData} from "../../interfaces";
@@ -68,14 +69,25 @@ export const ClientPaymentsAddingComponent: React.FC<Props> = (
         style={{
           maxHeight: "80vh",
           overflowY: "scroll",
+          padding: 0,
         }}
       >
         <List
+          size="small"
+          style={{
+            padding: 0,
+          }}
           bordered
           dataSource={kikobas}
           loading={loadidng}
+          itemLayout="horizontal"
           renderItem={(kikoba: KikobaData) => (
-            <List.Item actions={[]}>
+            <List.Item
+              actions={[]}
+              style={{
+                padding: 2,
+              }}
+            >
               {kikoba.name}
               <Tag
                 color="green"
@@ -122,6 +134,9 @@ export const ClientKikobaNamesComponent: React.FC<ClientKikobaNamesProps> = (
   const [contributionModal, setContributionModal] = useState(false);
   const [loanApplicationModal, setLoanApplicationModal] = useState(false);
 
+  const breakpoint = Grid.useBreakpoint();
+  const isMobile = !breakpoint.lg;
+
   const handleAddingContribution = (member: KikobaMemberData) => {
     setMember(member);
     setContributionModal(true);
@@ -164,45 +179,45 @@ export const ClientKikobaNamesComponent: React.FC<ClientKikobaNamesProps> = (
 
   return (
     <>
-      <div
-        style={{
-          maxHeight: "80vh",
-          overflowY: "scroll",
-        }}
-      >
+      <div>
         <List
+          size="small"
           bordered
           dataSource={members}
           loading={loadidng}
           renderItem={(member: KikobaMemberData) => (
             <List.Item
-              actions={[
-                props.loanApplication && (
-                  <Tooltip title="Click to Apply for Loan">
-                    <Button
-                      type="primary"
-                      icon={<PlusOutlined />}
-                      onClick={() => handleLoanApplicationModal(member)}
-                    >
-                      Apply
-                    </Button>
-                  </Tooltip>
-                ),
-                !props.loanApplication && (
-                  <Tooltip title="Click to Pay">
-                    <Button
-                      type="primary"
-                      disabled={props.kikoba.contributionAmount === 0}
-                      icon={<PayCircleFilled />}
-                      onClick={() => {
-                        handleAddingContribution(member);
-                      }}
-                    >
-                      Pay
-                    </Button>
-                  </Tooltip>
-                ),
-              ]}
+              actions={
+                isMobile
+                  ? []
+                  : [
+                      props.loanApplication && !isMobile && (
+                        <Tooltip title="Click to Apply for Loan">
+                          <Button
+                            type="primary"
+                            icon={<PlusOutlined />}
+                            onClick={() => handleLoanApplicationModal(member)}
+                          >
+                            Apply
+                          </Button>
+                        </Tooltip>
+                      ),
+                      !props.loanApplication && !isMobile && (
+                        <Tooltip title="Click to Pay">
+                          <Button
+                            type="primary"
+                            disabled={props.kikoba.contributionAmount === 0}
+                            icon={<PayCircleFilled />}
+                            onClick={() => {
+                              handleAddingContribution(member);
+                            }}
+                          >
+                            Pay
+                          </Button>
+                        </Tooltip>
+                      ),
+                    ]
+              }
             >
               <span>
                 <span style={{fontSize: 22}}>
@@ -224,6 +239,37 @@ export const ClientKikobaNamesComponent: React.FC<ClientKikobaNamesProps> = (
                     <>{formatNumber(props.kikoba.initialShare)}</>
                   )}
                 </Tag>
+
+                {isMobile && (
+                  <div>
+                    {props.loanApplication && isMobile && (
+                      <Tooltip title="Click to Apply for Loan">
+                        <Button
+                          type="primary"
+                          icon={<PlusOutlined />}
+                          onClick={() => handleLoanApplicationModal(member)}
+                        >
+                          Apply
+                        </Button>
+                      </Tooltip>
+                    )}
+                    {!props.loanApplication && isMobile && (
+                      <Tooltip title="Click to Pay">
+                        <Button
+                          style={{float: "right"}}
+                          type="primary"
+                          disabled={props.kikoba.contributionAmount === 0}
+                          icon={<PayCircleFilled />}
+                          onClick={() => {
+                            handleAddingContribution(member);
+                          }}
+                        >
+                          Pay
+                        </Button>
+                      </Tooltip>
+                    )}
+                  </div>
+                )}
               </span>
             </List.Item>
           )}
@@ -348,7 +394,7 @@ const ClientPaymentsAddingFormComponent: React.FC<FormProps> = (
         >
           Payments Marchants Supported
         </p>
-        <Card>
+        <Card size="small">
           <Row>
             <Col span={24} style={{display: "flex"}}>
               <Image
@@ -439,6 +485,7 @@ const ClientPaymentsAddingFormComponent: React.FC<FormProps> = (
           }}
           onFinishFailed={() => {}}
           autoComplete="off"
+          size="small"
         >
           <Form.Item
             label="Amount"

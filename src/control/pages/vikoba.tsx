@@ -164,6 +164,7 @@ export const ControlVikoba: React.FC<Props> = (props: Props) => {
         </Col>
       </Row>
       <Table
+        size="small"
         dataSource={vikobas}
         columns={columns}
         scroll={{x: true}}
